@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="ef@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.2">
+    <root id="1"/>
+    <schema id="2" parent="1" name="ef">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mysql"/>
+    <schema id="5" parent="1" name="performance_schema"/>
+    <schema id="6" parent="1" name="sys"/>
+    <table id="7" parent="2" name="Users"/>
+    <column id="8" parent="7" name="UserId">
+      <Position>1</Position>
+      <DataType>varchar(127)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="9" parent="7" name="Email">
+      <Position>3</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <column id="10" parent="7" name="Firstname">
+      <Position>4</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <column id="11" parent="7" name="IsActive">
+      <Position>6</Position>
+      <DataType>bit(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="12" parent="7" name="Lastname">
+      <Position>7</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <column id="13" parent="7" name="DebtorId">
+      <Position>2</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <column id="14" parent="7" name="Hash">
+      <Position>5</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <column id="15" parent="7" name="Salt">
+      <Position>8</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <key id="16" parent="7" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>UserId</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>

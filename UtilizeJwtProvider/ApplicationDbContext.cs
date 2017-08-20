@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+using CQRSlite.Events;
 using Microsoft.EntityFrameworkCore;
-using UtilizeJwtProvider.Models;
+using UtilizeJwtProvider.Domain.Event;
+using UtilizeJwtProvider.Domain.Event.Data;
+
 
 namespace UtilizeJwtProvider
 {
     public class ApplicationDbContext : DbContext {
         
-        public DbSet<User> Users { get; set; }
+        public DbSet<EventData> Events { get; set; }
+       
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder

@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using IdentityServer4.Test;
+﻿using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using UtilizeJwtProvider.IdentityServer;
-using UtilizeJwtProvider.Models;
 using UtilizeJwtProvider.Repository;
 using UtilizeJwtProvider.Services;
-using Resources = UtilizeJwtProvider.IdentityServer.Resources;
+
 
 namespace UtilizeJwtProvider
 {
@@ -31,9 +21,6 @@ namespace UtilizeJwtProvider
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-            
-          
-            
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -41,22 +28,19 @@ namespace UtilizeJwtProvider
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddSingleton<IClientStore, ClientStore>();
-
-            
-            // Add framework services.
+//            services.AddTransient<IUserRepository, UserRepository>();
+//            services.AddTransient<IPasswordService, Pbkdf2Hasher>();
+            services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<IAggregateFactory, AggregateFactory>();
+            services.AddSingleton<IUserCache, UserCache>();
             services.AddMvc();
+
 
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
-                .AddInMemoryApiResources(Resources.GetApiResources())
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
-
-
-
-
+                .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryApiResources(Config.GetApiResources());
+//                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
