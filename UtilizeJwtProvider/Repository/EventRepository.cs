@@ -15,9 +15,11 @@ namespace UtilizeJwtProvider.Repository
     public class EventRepository : IEventRepository
     {
         private readonly IAggregateFactory _factory;
+        private readonly EventDbContext _dbContext;
 
-        public EventRepository(IAggregateFactory factory)
+        public EventRepository(EventDbContext eventDbContext, IAggregateFactory factory)
         {
+            _dbContext = eventDbContext;
             _factory = factory;
         }
 
@@ -32,25 +34,16 @@ namespace UtilizeJwtProvider.Repository
                 .Select(e => e.ToEventData(aggregateType, aggregate.Id, originalVersion++))
                 .ToArray();
 
-            using (var context = new ApplicationDbContext())
-            {
-                context.Events.AddRange(eventsToSave);
-                context.SaveChanges();
-            }
-       
+
+            _dbContext.Events.AddRange(eventsToSave);
+            _dbContext.SaveChanges();
         }
 
         public T GetById<T>(Guid id) where T : AggregateRoot
         {
-            using (var context = new ApplicationDbContext())
-            {
-
-                var events = context.Events.Where(e => e.AggregateId.Equals(id)).ToList();
-                var aggregate = _factory.Create<T>(events);
-                return aggregate;
-            }
+            var events = _dbContext.Events.Where(e => e.AggregateId.Equals(id)).ToList();
+            var aggregate = _factory.Create<T>(events);
+            return aggregate;
         }
-        
-        
     }
 }

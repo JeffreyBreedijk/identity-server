@@ -47,6 +47,11 @@ namespace UtilizeJwtProvider.Domain.Aggregates
             ApplyChange(new UserDataUpdatedEvent(Id, Version, DateTimeOffset.UtcNow, firstname, lastname));
         }
 
+        public void UpdateDebtor(string debtorId)
+        {
+            ApplyChange(new UserAssignedToDebtorEvent(Id, Version, DateTimeOffset.Now, debtorId));
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType()) 
@@ -80,6 +85,11 @@ namespace UtilizeJwtProvider.Domain.Aggregates
         {
             Firstname = e.Firstname;
             Lastname = e.Lastname;
+        }
+
+        private void Apply(UserAssignedToDebtorEvent e)
+        {
+            DebtorId = e.DebtorId;
         }
         
     }

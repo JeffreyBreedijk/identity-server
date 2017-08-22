@@ -7,7 +7,7 @@ using UtilizeJwtProvider.Domain.Event.Data;
 
 namespace UtilizeJwtProvider
 {
-    public class ApplicationDbContext : DbContext {
+    public class EventDbContext : DbContext {
         
         public DbSet<EventData> Events { get; set; }
        

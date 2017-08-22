@@ -12,12 +12,14 @@ namespace UtilizeJwtProvider.Controllers
     public class UserController : Controller
     {
         private readonly IEventRepository _eventRepository;
-        private readonly IUserCache _userCache;
+        private readonly IUserRepository _userRepository;
+        private readonly IPasswordService _passwordService;
 
-        public UserController(IEventRepository eventRepository, IUserCache userCache)
+        public UserController(IEventRepository eventRepository, IUserRepository userRepository, IPasswordService passwordService)
         {
             _eventRepository = eventRepository;
-            _userCache = userCache;
+            _userRepository = userRepository;
+            _passwordService = passwordService;
         }
 
 
@@ -40,10 +42,21 @@ namespace UtilizeJwtProvider.Controllers
 //            return _userCache.FindUserByEmail("e");
         }
 
-//        [HttpPost]
-//        public void Post([FromBody] User user)
-//        {
-//            _userRepository.CreateUser(user);
-//        }
+        [HttpPost]
+        public void Post([FromBody] NewUser user)
+        {
+            if (!_userRepository.UserExists(user.Email)) return;
+            var salt = _passwordService.CreateSalt();
+            var hash = _passwordService.GetHash(user.Password, salt);
+            var usr = new User(Guid.NewGuid(), hash, salt, user.Email);
+            _eventRepository.Save(usr);
+            _userRepository.AddUserToCache(usr);            
+        }
+
+        public class NewUser
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
     }
 }

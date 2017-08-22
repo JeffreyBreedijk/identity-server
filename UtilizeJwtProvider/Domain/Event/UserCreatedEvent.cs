@@ -8,6 +8,8 @@ namespace UtilizeJwtProvider.Domain.Event
         public readonly string Email;
         public readonly string Hash;
         public readonly string Salt;
+        public readonly string Firstname;
+        public readonly string Lastname;
         
         public UserCreatedEvent(Guid id, int version, DateTimeOffset timestamp, string email, string hash, string salt)
         {
