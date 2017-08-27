@@ -29,6 +29,7 @@ namespace UtilizeJwtProvider.IdentityServer
                                 JwtClaimTypes.Email,
                                 JwtClaimTypes.FamilyName,
                                 JwtClaimTypes.GivenName,
+                                JwtClaimTypes.Role,
                                 "debtor_id"
                             }
                         }

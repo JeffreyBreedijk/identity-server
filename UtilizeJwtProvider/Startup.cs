@@ -1,4 +1,5 @@
-﻿using IdentityServer4.AspNetIdentity;
+﻿using System;
+using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 using UtilizeJwtProvider.IdentityServer;
 using UtilizeJwtProvider.Repository;
 using UtilizeJwtProvider.Services;
@@ -22,6 +26,18 @@ namespace UtilizeJwtProvider
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+            
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.Elasticsearch().WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+                {
+                    MinimumLogEventLevel = LogEventLevel.Verbose,
+                    AutoRegisterTemplate = true,
+                })
+                .CreateLogger();
+          
+            
             Configuration = builder.Build();
         }
 
@@ -44,24 +60,49 @@ namespace UtilizeJwtProvider
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
+
+            services.AddLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+                       
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            loggerFactory.AddSerilog();
+            
+            app.UseJwtBearerAuthentication(JwtBearerOptions(env.IsDevelopment()));
+
+            
             app.UseMvc();
             app.UseIdentityServer();
+            
+            
+            
 
             using (var context = new EventDbContext())
             {
                 context.Database.EnsureCreated();
             }
-      
-           
 
+        }
+        
+        private static JwtBearerOptions JwtBearerOptions(bool isDev)
+        {
+            var bearerOptions = new JwtBearerOptions()
+            {
+                Audience = "Utilize API",
+                Authority = "http://localhost:5000/",
+                AutomaticAuthenticate = true,
+            };
+
+            if (isDev)
+            {
+                bearerOptions.RequireHttpsMetadata = false;
+            }
+            return bearerOptions;
         }
     }
 }

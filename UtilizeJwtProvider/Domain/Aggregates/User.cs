@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using CQRSlite.Domain;
 using CQRSlite.Events;
+using Serilog;
 using UtilizeJwtProvider.Domain.Event;
 
 
@@ -28,6 +29,8 @@ namespace UtilizeJwtProvider.Domain.Aggregates
         public bool IsDeleted { get;  private set;}
         
         public string DebtorId { get; private set;}
+        
+        public HashSet<string> Roles = new HashSet<string>();
 
         public User() {}
 
@@ -49,7 +52,18 @@ namespace UtilizeJwtProvider.Domain.Aggregates
 
         public void UpdateDebtor(string debtorId)
         {
-            ApplyChange(new UserAssignedToDebtorEvent(Id, Version, DateTimeOffset.Now, debtorId));
+            ApplyChange(new UserAssignedToDebtorEvent(Id, Version, DateTimeOffset.UtcNow, debtorId));
+        }
+
+        public void AddRole(string role)
+        {
+            ApplyChange(new UserAddRoleEvent(Id, Version, DateTimeOffset.UtcNow, role.ToUpper()));
+        }
+        
+        public void RemoveRole(string role)
+        {
+            if (!Roles.Contains(role.ToUpper())) return;
+            ApplyChange(new UserRemoveRoleEvent(Id, Version, DateTimeOffset.UtcNow, role));
         }
 
         public override bool Equals(object obj)
@@ -90,6 +104,16 @@ namespace UtilizeJwtProvider.Domain.Aggregates
         private void Apply(UserAssignedToDebtorEvent e)
         {
             DebtorId = e.DebtorId;
+        }
+
+        private void Apply(UserAddRoleEvent e)
+        {
+            Roles.Add(e.Role);
+        }
+
+        private void Apply(UserRemoveRoleEvent e)
+        {
+            Roles.Remove(e.Role);
         }
         
     }

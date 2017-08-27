@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
@@ -52,7 +54,8 @@ namespace UtilizeJwtProvider.IdentityServer
 
         public static Claim[] GetUserClaims(User user)
         {
-            return new[]
+          
+            var claims = new List<Claim>()
             {
                 new Claim("user_id", user.Id.ToString() ?? ""),
                 new Claim(type: JwtClaimTypes.Name,
@@ -64,9 +67,14 @@ namespace UtilizeJwtProvider.IdentityServer
                 new Claim(JwtClaimTypes.Email, user.Email ?? ""),
                 new Claim("debtor_id", user.DebtorId ?? ""),
 
-//                roles
-//                new Claim(JwtClaimTypes.Role, user.Role)
+                
+                
+              
             };
+            
+            user.Roles.ToList().ForEach(r => claims.Add(new Claim(JwtClaimTypes.Role, r)));
+
+            return claims.ToArray();
         }
     }
 }

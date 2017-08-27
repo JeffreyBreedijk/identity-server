@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="912f1d01-d9ec-4491-b149-1d9ae16b28a5" name="Default" comment="Working A">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAssignedToDebtorEvent.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserRepository.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Services/PasswordService.cs" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserCache.cs" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/ApplicationDbContext.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/EventDbContext.cs" />
+    <list default="true" id="912f1d01-d9ec-4491-b149-1d9ae16b28a5" name="Default" comment="Added serilog">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Dockerfile" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAddRoleEvent.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserRemoveRoleEvent.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.idea.UtilizeJwtProvider/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.UtilizeJwtProvider/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/.gitignore" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserCreatedEvent.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserCreatedEvent.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ResourceOwnerPasswordValidator.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ResourceOwnerPasswordValidator.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Repository/EventRepository.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Repository/EventRepository.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Program.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Program.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UtilizeJwtProvider/UtilizeJwtProvider.csproj" afterPath="$PROJECT_DIR$/UtilizeJwtProvider/UtilizeJwtProvider.csproj" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -60,34 +62,35 @@
     </PATH>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="UtilizeJwtProvider" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="EventData.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/Data/EventData.cs">
+      <file leaf-file-name="User.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="1" lean-forward="false" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NuGet.Config" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.config/NuGet/NuGet.Config">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="16" lean-forward="false" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UtilizeJwtProvider.csproj" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/UtilizeJwtProvider.csproj">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="10" lean-forward="false" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
-              <folding />
+            <state relative-caret-position="-394">
+              <caret line="65" column="91" lean-forward="false" selection-start-line="65" selection-start-column="91" selection-end-line="65" selection-end-column="91" />
+              <folding>
+                <marker date="1503829174000" expanded="false" signature="6:202" ph="..." />
+                <marker date="1503829174000" expanded="true" signature="251:3287" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="298:3285" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="996:1118" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="1180:1342" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="1422:1550" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="1601:1723" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="1765:1884" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="1937:2106" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="2155:2347" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="2390:2450" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="2498:2684" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="2736:2810" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="2862:2954" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="3011:3066" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="3114:3165" ph="{...}" />
+                <marker date="1503829174000" expanded="true" signature="3216:3270" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -99,43 +102,48 @@
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <marker date="1503294571000" expanded="false" signature="7:143" ph="..." />
-                <marker date="1503294571000" expanded="true" signature="174:523" ph="{...}" />
                 <marker date="1503294571000" expanded="true" signature="221:511" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="User.cs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs">
+      <file leaf-file-name="UserController.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="19" column="52" lean-forward="false" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+            <state relative-caret-position="300">
+              <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
-                <marker date="1503234551000" expanded="false" signature="6:187" ph="..." />
-                <marker date="1503234551000" expanded="true" signature="236:2611" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="283:2609" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="910:1032" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="1094:1256" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="1336:1464" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="1515:1634" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="1683:1875" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="1918:1978" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="2026:2212" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="2264:2338" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="2390:2482" ph="{...}" />
-                <marker date="1503234551000" expanded="true" signature="2539:2594" ph="{...}" />
+                <marker date="1503829683000" expanded="true" signature="6:290" ph="..." />
+                <marker date="1503829683000" expanded="true" signature="333:2220" ph="{...}" />
+                <marker date="1503829683000" expanded="true" signature="412:2218" ph="{...}" />
+                <marker date="1503829683000" expanded="true" signature="800:1031" ph="{...}" />
+                <marker date="1503829683000" expanded="true" signature="1077:1445" ph="{...}" />
+                <marker date="1503829683000" expanded="true" signature="1552:2067" ph="{...}" />
+                <marker date="1503829683000" expanded="true" signature="2097:2212" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EventRepository.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Repository/EventRepository.cs">
+      <file leaf-file-name="Startup.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="11" column="10" lean-forward="false" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
-              <folding />
+            <state relative-caret-position="360">
+              <caret line="38" column="10" lean-forward="false" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
+              <folding>
+                <marker date="1503829224000" expanded="false" signature="6:501" ph="..." />
+                <marker date="1503829224000" expanded="true" signature="532:3783" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="559:3781" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="614:1480" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="1233:1367" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="1707:2542" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="2760:3305" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="3216:3294" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="3383:3775" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="3461:3618" ph="{...}" />
+                <marker date="1503829224000" expanded="true" signature="3643:3731" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -143,19 +151,89 @@
       <file leaf-file-name="UserRepository.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserRepository.cs">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="15" column="46" lean-forward="false" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
+              <folding>
+                <marker date="1503294571000" expanded="false" signature="6:96" ph="..." />
+                <marker date="1503294571000" expanded="true" signature="176:311" ph="{...}" />
+                <marker date="1503294571000" expanded="true" signature="370:1063" ph="{...}" />
+                <marker date="1503294571000" expanded="true" signature="522:803" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Program.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Program.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="17" column="1" lean-forward="false" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+              <folding>
+                <marker date="1503642212000" expanded="false" signature="6:235" ph="..." />
+                <marker date="1503642212000" expanded="true" signature="292:665" ph="{...}" />
+                <marker date="1503642212000" expanded="true" signature="345:659" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="appsettings.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/appsettings.json">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
-              <caret line="10" column="39" lean-forward="false" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding>
+                <marker date="1502367346000" expanded="true" signature="15:99" ph="{...}" />
+                <marker date="1502367346000" expanded="true" signature="61:95" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Dockerfile" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="42" lean-forward="false" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PasswordService.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Services/PasswordService.cs">
+      <file leaf-file-name="UserAddRoleEvent.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAddRoleEvent.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="885">
-              <caret line="64" column="9" lean-forward="false" selection-start-line="64" selection-start-column="9" selection-end-line="64" selection-end-column="9" />
-              <folding />
+            <state relative-caret-position="210">
+              <caret line="16" column="21" lean-forward="false" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+              <folding>
+                <marker date="1503426919000" expanded="false" signature="6:70" ph="..." />
+                <marker date="1503426919000" expanded="true" signature="113:571" ph="{...}" />
+                <marker date="1503426919000" expanded="true" signature="158:569" ph="{...}" />
+                <marker date="1503426919000" expanded="true" signature="431:563" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Config.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="18" column="39" lean-forward="false" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="39" />
+              <folding>
+                <marker date="1503427339000" expanded="false" signature="6:149" ph="..." />
+                <marker date="1503427339000" expanded="true" signature="194:1681" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="220:1679" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="300:1207" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="348:1196" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="398:1182" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="491:1164" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="553:1119" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="745:1093" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="1271:1672" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="1330:1661" ph="{...}" />
+                <marker date="1503427339000" expanded="true" signature="1375:1616" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -170,7 +248,9 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BA3A7F6D-38B9-4898-A085-13180E3FC198/f6/9631a35c/Argon2Type.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BA3A7F6D-38B9-4898-A085-13180E3FC198/32/20e994a2/Argon2Version.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BA3A7F6D-38B9-4898-A085-13180E3FC198/e9/d7829372/Argon2Config.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserRemoveRoleEvent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/b0/eea396f6/ProfileDataRequestContext.cs" root0="SKIP_INSPECTION" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/DC3934A6-D617-4608-BF84-5E6EF3F912F8/f7/2ff8775c/DefaultAuthorizationService.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/appsettings.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/AF2A2068-32C3-4E61-AF21-AE4CA2688B86/a5/709a8f7a/Claim.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs" root0="FORCE_HIGHLIGHTING" />
@@ -188,7 +268,7 @@
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9A03A33A-8635-4E9C-B5FD-8EC2E2B8D727/2f/93c41bba/PbeParametersGenerator.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/EventDbContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/91EEDC48-CA23-4E86-80FE-FA155CC26AA3/12/b67c6d82/Claim.cs" root0="SKIP_INSPECTION" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/91EEDC48-CA23-4E86-80FE-FA155CC26AA3/12/b67c6d82/Claim.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/98/8b916e4c/ApiResource.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/78/2f39f0b9/Scope.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/.config/NuGet/NuGet.Config" root0="FORCE_HIGHLIGHTING" />
@@ -203,6 +283,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/91CDEFF3-93B8-4773-BDB5-DA1A22298117/d7/0de45f75/IdentityDbContext.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/c7/9d2154e4/TokenEndpoint.cs" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAddRoleEvent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2645C1C7-3455-46F5-B968-E91DE81E2B12/9e/53b00236/DbContextOptions.cs" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/Data/EventData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/UtilizeJwtProvider/Services/AggregateFactory.cs" root0="FORCE_HIGHLIGHTING" />
@@ -222,13 +303,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Config/Config.cs" />
-        <option value="$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/b0/eea396f6/ProfileDataRequestContext.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Client.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Users.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/MyContext.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Clients.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/.gitignore" />
         <option value="$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/c7/9d2154e4/TokenEndpoint.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ClientStore.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Resources.cs" />
@@ -236,7 +311,6 @@
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Services/ProfileService.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Scopes.cs" />
         <option value="$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/96/3d652dbc/GrantTypes.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Services/ResourceOwnerPasswordValidator.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Models/Password.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Events/UpdatePasswordEvent.cs" />
@@ -251,7 +325,6 @@
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Events/DomainEvent.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/EventBase.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Events/UserEvent.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ResourceOwnerPasswordValidator.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Services/UserService.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Services/PasswordService.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserRepository.cs" />
@@ -262,17 +335,25 @@
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Repository/AggregateFactory.cs" />
         <option value="$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9FF1E237-0AFD-4361-8941-925EE537C1A6/b7/f96a950d/IEvent.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/PasswordUpdatedEvent.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserCreatedEvent.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/Data/ExtendsEventData.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Controllers/Controller1.cs" />
         <option value="$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9FF1E237-0AFD-4361-8941-925EE537C1A6/4b/0aec5c58/AggregateRoot.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserDataUpdatedEvent.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Services/AggregateFactory.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserCache.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Repository/EventRepository.cs" />
-        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/.gitignore" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserCreatedEvent.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAddRoleEvent.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserRemoveRoleEvent.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs" />
+        <option value="$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/91EEDC48-CA23-4E86-80FE-FA155CC26AA3/12/b67c6d82/Claim.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ResourceOwnerPasswordValidator.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Dockerfile" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Program.cs" />
         <option value="$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs" />
+        <option value="$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs" />
       </list>
     </option>
   </component>
@@ -306,6 +387,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="SolutionExplorer">
         <subPane>
           <PATH>
@@ -388,14 +470,14 @@
         <option name="show-file-system" value="false" />
         <option name="show-all-items" value="false" />
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="RiderNuGetOptionsPageId" />
-    <property name="SearchEverywhereHistoryKey" value="scopevv&#9;null&#9;null&#10;TokenEnd&#9;null&#9;null&#10;authenticationHan&#9;null&#9;null" />
+    <property name="settings.editor.selected.configurable" value="RemoteServers" />
+    <property name="SearchEverywhereHistoryKey" value="defaultauth&#9;null&#9;null&#10;scopevv&#9;null&#9;null&#10;TokenEnd&#9;null&#9;null&#10;authenticationHan&#9;null&#9;null" />
     <property name="restartRequiresConfirmation" value="false" />
+    <property name="do_not_show_solution_notification" value="true" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -480,7 +562,7 @@
       <option name="USE_MONO" value="0" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <envs>
-        <env name="ASPNETCORE_ENVIRONMENT" value="Production" />
+        <env name="ASPNETCORE_ENVIRONMENT" value="Development" />
         <env name="ASPNETCORE_URLS" value="http://localhost:5000" />
       </envs>
       <method />
@@ -488,6 +570,7 @@
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue=".NET Project.Default" />
     </list>
+    <configuration />
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -517,11 +600,26 @@
       <workItem from="1503032506252" duration="3274000" />
       <workItem from="1503072407627" duration="3607000" />
       <workItem from="1503134388396" duration="17790000" />
+      <workItem from="1503403516283" duration="20000" />
+      <workItem from="1503426527130" duration="2829000" />
+      <workItem from="1503515479510" duration="3916000" />
+      <workItem from="1503641474583" duration="154000" />
+      <workItem from="1503641631982" duration="544000" />
+      <workItem from="1503728762639" duration="752000" />
+      <workItem from="1503729843985" duration="2608000" />
     </task>
+    <task id="LOCAL-00001" summary="Working B">
+      <created>1503381780982</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1503381780982</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72368000" />
+    <option name="totallyTimeSpent" value="84287000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -537,13 +635,12 @@
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5025754" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.49742457" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32965416" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -551,28 +648,15 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39923954" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953104" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32965416" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39923954" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -583,86 +667,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Working A" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working A" />
+    <MESSAGE value="Working B" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working B" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="72" />
+      <option name="time" value="75" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/C162D026-09B8-40FF-998A-5D8434D894BF/80/a24908c3/CalendarId.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="14" column="4" lean-forward="false" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8BB505FD-68B2-4F69-877C-2D31A5B80A36/96/3d652dbc/GrantTypes.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6">
-          <caret line="93" column="5" lean-forward="false" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CB35C65A-88A4-4AC6-B175-FEB9C8957AD1/57/4fa33708/JwtClaimTypes.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-229">
-          <caret line="9" column="22" lean-forward="false" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/C162D026-09B8-40FF-998A-5D8434D894BF/21/69df6586/CultureInfo.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="15" lean-forward="false" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BA3A7F6D-38B9-4898-A085-13180E3FC198/f6/9631a35c/Argon2Type.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="36" lean-forward="false" selection-start-line="17" selection-start-column="31" selection-end-line="20" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BA3A7F6D-38B9-4898-A085-13180E3FC198/32/20e994a2/Argon2Version.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="39" lean-forward="false" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BA3A7F6D-38B9-4898-A085-13180E3FC198/e9/d7829372/Argon2Config.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9A03A33A-8635-4E9C-B5FD-8EC2E2B8D727/8b/22f326e9/Sha3Digest.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="11" lean-forward="false" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9A03A33A-8635-4E9C-B5FD-8EC2E2B8D727/2f/93c41bba/PbeParametersGenerator.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="24" lean-forward="false" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9A03A33A-8635-4E9C-B5FD-8EC2E2B8D727/dd/c4f0861c/Pkcs5S2ParametersGenerator.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="53" lean-forward="false" selection-start-line="20" selection-start-column="53" selection-end-line="20" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Models/Password.cs" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Models/UserDto.cs" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Events/UserRegistered.cs" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Events/UpdatePasswordEvent.cs" />
@@ -678,20 +692,6 @@
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Events/DomainEvent.cs" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Events/UserEvent.cs" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Repository/UpdatePasswordEventRepository.cs" />
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ResourceOwnerPasswordValidator.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1097">
-          <caret line="74" column="3" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="74" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="26" column="29" lean-forward="false" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/Dto/EventDto.cs" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/C1970516-6C7C-4A60-8E18-2E859C4DE6D2/48/3dcb764f/TypeNameHandling.cs">
       <provider selected="true" editor-type-id="text-editor">
@@ -717,27 +717,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Controllers/Controller1.cs" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/ApplicationDbContext.cs" />
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserRepository.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="10" column="39" lean-forward="false" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/Data/EventData.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="1" lean-forward="false" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Services/PasswordService.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="885">
-          <caret line="64" column="9" lean-forward="false" selection-start-line="64" selection-start-column="9" selection-end-line="64" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -746,21 +729,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
           <caret line="34" column="23" lean-forward="false" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="34" column="59" lean-forward="false" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserDataUpdatedEvent.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="10" column="15" lean-forward="false" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
         </state>
       </provider>
     </entry>
@@ -775,28 +743,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-106">
           <caret line="14" column="32" lean-forward="false" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
-          <folding>
-            <marker date="1503073127000" expanded="false" signature="6:184" ph="..." />
-            <marker date="1503073127000" expanded="true" signature="270:1620" ph="{...}" />
-            <marker date="1503073127000" expanded="true" signature="544:1307" ph="{...}" />
-            <marker date="1503073127000" expanded="true" signature="709:835" ph="{...}" />
-            <marker date="1503073127000" expanded="true" signature="1016:1296" ph="{...}" />
-            <marker date="1503073127000" expanded="true" signature="1380:1614" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserCreatedEvent.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Services/AggregateFactory.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -812,30 +758,135 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="11" column="10" lean-forward="false" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="30" column="11" lean-forward="false" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProviderTests/UtilizeJwtProviderTests.csproj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="10" lean-forward="true" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProviderTests/UtilizeJwtProviderTests.csproj" />
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/UtilizeJwtProvider.csproj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="10" lean-forward="false" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProviderTests/UnitTest1.cs" />
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProviderTests/DbSetMock.cs" />
+    <entry file="file://$PROJECT_DIR$/UnitTestProject/UnitTest1.cs" />
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="424">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.config/NuGet/NuGet.Config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="16" lean-forward="false" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAssignedToDebtorEvent.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Services/PasswordService.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="833">
+          <caret line="64" column="9" lean-forward="false" selection-start-line="64" selection-start-column="9" selection-end-line="64" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Services/AggregateFactory.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserDataUpdatedEvent.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="10" column="15" lean-forward="false" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserCreatedEvent.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="36" lean-forward="false" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserRemoveRoleEvent.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="19" column="9" lean-forward="false" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/91EEDC48-CA23-4E86-80FE-FA155CC26AA3/12/b67c6d82/Claim.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="15" lean-forward="false" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/ResourceOwnerPasswordValidator.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="76" column="35" lean-forward="false" selection-start-line="76" selection-start-column="35" selection-end-line="76" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/appsettings.Development.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/DC3934A6-D617-4608-BF84-5E6EF3F912F8/f7/2ff8775c/DefaultAuthorizationService.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="20" column="15" lean-forward="false" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/IdentityServer/Config.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="18" column="39" lean-forward="false" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="39" />
+          <folding>
+            <marker date="1503427339000" expanded="false" signature="6:149" ph="..." />
+            <marker date="1503427339000" expanded="true" signature="194:1681" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="220:1679" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="300:1207" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="348:1196" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="398:1182" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="491:1164" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="553:1119" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="745:1093" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="1271:1672" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="1330:1661" ph="{...}" />
+            <marker date="1503427339000" expanded="true" signature="1375:1616" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Event/UserAddRoleEvent.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" column="21" lean-forward="false" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+          <folding>
+            <marker date="1503426919000" expanded="false" signature="6:70" ph="..." />
+            <marker date="1503426919000" expanded="true" signature="113:571" ph="{...}" />
+            <marker date="1503426919000" expanded="true" signature="158:569" ph="{...}" />
+            <marker date="1503426919000" expanded="true" signature="431:563" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -845,55 +896,114 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <marker date="1503294571000" expanded="false" signature="7:143" ph="..." />
-            <marker date="1503294571000" expanded="true" signature="174:523" ph="{...}" />
             <marker date="1503294571000" expanded="true" signature="221:511" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProviderTests/UnitTest1.cs">
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/appsettings.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="25" column="15" lean-forward="false" selection-start-line="25" selection-start-column="15" selection-end-line="25" selection-end-column="15" />
+        <state relative-caret-position="120">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <marker date="1502367346000" expanded="true" signature="15:99" ph="{...}" />
+            <marker date="1502367346000" expanded="true" signature="61:95" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="42" lean-forward="false" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Repository/UserRepository.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="15" column="46" lean-forward="false" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
+          <folding>
+            <marker date="1503294571000" expanded="false" signature="6:96" ph="..." />
+            <marker date="1503294571000" expanded="true" signature="176:311" ph="{...}" />
+            <marker date="1503294571000" expanded="true" signature="370:1063" ph="{...}" />
+            <marker date="1503294571000" expanded="true" signature="522:803" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Program.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="17" column="1" lean-forward="false" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+          <folding>
+            <marker date="1503642212000" expanded="false" signature="6:235" ph="..." />
+            <marker date="1503642212000" expanded="true" signature="292:665" ph="{...}" />
+            <marker date="1503642212000" expanded="true" signature="345:659" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Domain/Aggregates/User.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="19" column="52" lean-forward="false" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+        <state relative-caret-position="-394">
+          <caret line="65" column="91" lean-forward="false" selection-start-line="65" selection-start-column="91" selection-end-line="65" selection-end-column="91" />
           <folding>
-            <marker date="1503234551000" expanded="false" signature="6:187" ph="..." />
-            <marker date="1503234551000" expanded="true" signature="236:2611" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="283:2609" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="910:1032" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="1094:1256" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="1336:1464" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="1515:1634" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="1683:1875" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="1918:1978" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="2026:2212" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="2264:2338" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="2390:2482" ph="{...}" />
-            <marker date="1503234551000" expanded="true" signature="2539:2594" ph="{...}" />
+            <marker date="1503829174000" expanded="false" signature="6:202" ph="..." />
+            <marker date="1503829174000" expanded="true" signature="251:3287" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="298:3285" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="996:1118" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="1180:1342" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="1422:1550" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="1601:1723" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="1765:1884" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="1937:2106" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="2155:2347" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="2390:2450" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="2498:2684" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="2736:2810" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="2862:2954" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="3011:3066" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="3114:3165" ph="{...}" />
+            <marker date="1503829174000" expanded="true" signature="3216:3270" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UtilizeJwtProviderTests/DbSetMock.cs">
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Startup.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="16" column="5" lean-forward="false" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-          <folding />
+        <state relative-caret-position="360">
+          <caret line="38" column="10" lean-forward="false" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
+          <folding>
+            <marker date="1503829224000" expanded="false" signature="6:501" ph="..." />
+            <marker date="1503829224000" expanded="true" signature="532:3783" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="559:3781" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="614:1480" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="1233:1367" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="1707:2542" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="2760:3305" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="3216:3294" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="3383:3775" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="3461:3618" ph="{...}" />
+            <marker date="1503829224000" expanded="true" signature="3643:3731" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UnitTestProject/UnitTest1.cs">
+    <entry file="file://$PROJECT_DIR$/UtilizeJwtProvider/Controllers/UserController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="13" column="1" lean-forward="false" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-          <folding />
+        <state relative-caret-position="300">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding>
+            <marker date="1503829683000" expanded="true" signature="6:290" ph="..." />
+            <marker date="1503829683000" expanded="true" signature="333:2220" ph="{...}" />
+            <marker date="1503829683000" expanded="true" signature="412:2218" ph="{...}" />
+            <marker date="1503829683000" expanded="true" signature="800:1031" ph="{...}" />
+            <marker date="1503829683000" expanded="true" signature="1077:1445" ph="{...}" />
+            <marker date="1503829683000" expanded="true" signature="1552:2067" ph="{...}" />
+            <marker date="1503829683000" expanded="true" signature="2097:2212" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>

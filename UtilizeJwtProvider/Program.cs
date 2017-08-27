@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 namespace UtilizeJwtProvider
 {
@@ -12,6 +14,9 @@ namespace UtilizeJwtProvider
     {
         public static void Main(string[] args)
         {
+            
+ 
+            
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
