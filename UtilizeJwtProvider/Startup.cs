@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
@@ -27,15 +28,7 @@ namespace UtilizeJwtProvider
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .MinimumLevel.Debug()
-                .WriteTo.Elasticsearch().WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
-                {
-                    MinimumLogEventLevel = LogEventLevel.Verbose,
-                    AutoRegisterTemplate = true,
-                })
-                .CreateLogger();
+            
           
             
             Configuration = builder.Build();
@@ -46,8 +39,14 @@ namespace UtilizeJwtProvider
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbConnectionString =
+                $"Server={Configuration["Database:Host"]};" +
+                $"database={Configuration["Database:Name"]};" +
+                $"uid={Configuration["Database:Username"]};" +
+                $"pwd={Configuration["Database:Password"]};";
+            
             services.AddDbContext<EventDbContext>(options =>
-                options.UseMySql(@"Server=localhost;database=ef;uid=root;pwd=root;"));
+                options.UseMySql(@dbConnectionString));
             services.AddTransient<IPasswordService, PkcsSha256PasswordService>();
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAggregateFactory, AggregateFactory>();
@@ -67,6 +66,15 @@ namespace UtilizeJwtProvider
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.Elasticsearch().WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri($"{Configuration["Logging:ElasticSearch"]}"))
+                {
+                    MinimumLogEventLevel = LogEventLevel.Verbose,
+                    AutoRegisterTemplate = true,
+                })
+                .CreateLogger();
                        
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
