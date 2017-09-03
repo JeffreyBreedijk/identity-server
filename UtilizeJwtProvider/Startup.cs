@@ -80,10 +80,14 @@ namespace UtilizeJwtProvider
             loggerFactory.AddDebug();
 
             loggerFactory.AddSerilog();
-            
-            app.UseJwtBearerAuthentication(JwtBearerOptions(env.IsDevelopment()));
 
-            
+            if (!env.IsDevelopment())
+            {
+                app.UseJwtBearerAuthentication(JwtBearerOptions(env.IsStaging()));
+            }
+
+
+
             app.UseMvc();
             app.UseIdentityServer();
             
@@ -97,16 +101,16 @@ namespace UtilizeJwtProvider
 
         }
         
-        private static JwtBearerOptions JwtBearerOptions(bool isDev)
+        private static JwtBearerOptions JwtBearerOptions(bool isStaging)
         {
-            var bearerOptions = new JwtBearerOptions()
+            var bearerOptions = new JwtBearerOptions
             {
                 Audience = "Utilize API",
                 Authority = "http://localhost:5000/",
                 AutomaticAuthenticate = true,
             };
 
-            if (isDev)
+            if (isStaging)
             {
                 bearerOptions.RequireHttpsMetadata = false;
             }

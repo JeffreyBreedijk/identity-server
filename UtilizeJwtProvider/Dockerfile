@@ -1,11 +1,12 @@
-FROM microsoft/dotnet:2.0-sdk
+FROM microsoft/dotnet:1.1-sdk
 WORKDIR /app
 
 # copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+#cd COPY *.csproj ./
 
 # copy and build everything else
 COPY . ./
+
+RUN ["dotnet", "restore"]
 RUN dotnet publish -c Release -o out
-ENTRYPOINT ["dotnet", "out/dotnetapp.dll"]
+ENTRYPOINT ["dotnet", "out/UtilizeJwtProvider.dll"]
