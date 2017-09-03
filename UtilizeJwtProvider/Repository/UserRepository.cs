@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UtilizeJwtProvider.DataSources;
 using UtilizeJwtProvider.Domain.Aggregates;
 
 namespace UtilizeJwtProvider.Repository
@@ -17,6 +18,7 @@ namespace UtilizeJwtProvider.Repository
 
         public InMemoryUserRepository(EventDbContext dbContext, IEventRepository eventRepository)
         {
+            dbContext.Database.EnsureCreated();
             _users = new HashSet<User>(dbContext.Events
                     .Where(e => e.AggregateType.Equals("User"))
                     .Select(e => e.AggregateId)

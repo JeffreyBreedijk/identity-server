@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CQRSlite.Domain;
+using UtilizeJwtProvider.DataSources;
 using UtilizeJwtProvider.Domain.Event;
 using UtilizeJwtProvider.Services;
 

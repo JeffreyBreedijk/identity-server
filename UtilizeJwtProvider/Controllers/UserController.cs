@@ -19,12 +19,12 @@ namespace UtilizeJwtProvider.Controllers
         private readonly IPasswordService _passwordService;
         private readonly ILogger _logger;
 
-        public UserController(ILoggerFactory _loggerFactory, IEventRepository eventRepository, IUserRepository userRepository, IPasswordService passwordService)
+        public UserController(ILoggerFactory loggerFactory, IEventRepository eventRepository, IUserRepository userRepository, IPasswordService passwordService)
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
             _passwordService = passwordService;
-            _logger = _loggerFactory.CreateLogger("UserController");
+            _logger = loggerFactory.CreateLogger("UserController");
         }
 
 

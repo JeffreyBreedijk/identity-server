@@ -2,8 +2,10 @@
 using System.Text;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
+using UtilizeJwtProvider.DataSources;
 using UtilizeJwtProvider.IdentityServer;
 using UtilizeJwtProvider.Repository;
 using UtilizeJwtProvider.Services;
@@ -20,6 +23,8 @@ namespace UtilizeJwtProvider
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+        
         public Startup( IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -27,14 +32,11 @@ namespace UtilizeJwtProvider
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            
-            
-          
-            
+
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
+       
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -45,15 +47,19 @@ namespace UtilizeJwtProvider
                 $"uid={Configuration["Database:Username"]};" +
                 $"pwd={Configuration["Database:Password"]};";
             
+            // Configure DB connection
             services.AddDbContext<EventDbContext>(options =>
                 options.UseMySql(@dbConnectionString));
+            
+            // Configure other services
             services.AddTransient<IPasswordService, PkcsSha256PasswordService>();
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAggregateFactory, AggregateFactory>();
             services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            
             services.AddMvc();
 
-
+            // Configure IdentityServer
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
                 .AddInMemoryClients(Config.GetClients())
@@ -81,6 +87,7 @@ namespace UtilizeJwtProvider
 
             loggerFactory.AddSerilog();
 
+            // Do not use JWT authentication in DEV mode
             if (!env.IsDevelopment())
             {
                 app.UseJwtBearerAuthentication(JwtBearerOptions(env.IsStaging()));
@@ -91,13 +98,6 @@ namespace UtilizeJwtProvider
             app.UseMvc();
             app.UseIdentityServer();
             
-            
-            
-
-            using (var context = new EventDbContext())
-            {
-                context.Database.EnsureCreated();
-            }
 
         }
         
