@@ -72,28 +72,13 @@ namespace UtilizeJwtProvider
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .MinimumLevel.Debug()
-                .WriteTo.Elasticsearch().WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri($"{Configuration["Logging:ElasticSearch"]}"))
-                {
-                    MinimumLogEventLevel = LogEventLevel.Verbose,
-                    AutoRegisterTemplate = true,
-                })
-                .CreateLogger();
-                       
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             loggerFactory.AddSerilog();
 
-            // Do not use JWT authentication in DEV mode
-            if (!env.IsDevelopment())
-            {
-                app.UseJwtBearerAuthentication(JwtBearerOptions(env.IsStaging()));
-            }
-
-
+            app.UseIdentityServerAuthentication(JwtBearerOptions(env.IsDevelopment()));
 
             app.UseMvc();
             app.UseIdentityServer();
@@ -101,13 +86,15 @@ namespace UtilizeJwtProvider
 
         }
         
-        private static JwtBearerOptions JwtBearerOptions(bool isStaging)
+        private static IdentityServerAuthenticationOptions JwtBearerOptions(bool isStaging)
         {
-            var bearerOptions = new JwtBearerOptions
+            var bearerOptions = new IdentityServerAuthenticationOptions
             {
-                Audience = "Utilize API",
                 Authority = "http://localhost:5000/",
+                ApiName = "Utilize API",
+
                 AutomaticAuthenticate = true,
+                AutomaticChallenge = true
             };
 
             if (isStaging)
