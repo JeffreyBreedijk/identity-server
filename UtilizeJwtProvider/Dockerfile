@@ -1,12 +1,16 @@
-FROM microsoft/dotnet:1.1-sdk
+FROM microsoft/aspnetcore-build:1.1.2
 WORKDIR /app
 
 # copy csproj and restore as distinct layers
-#cd COPY *.csproj ./
+COPY *.csproj ./
+RUN dotnet restore
 
-# copy and build everything else
+# copy everything else and build
 COPY . ./
-
-RUN ["dotnet", "restore"]
 RUN dotnet publish -c Release -o out
+
+# build runtime image
+#FROM microsoft/aspnetcore
+#WORKDIR /app
+#COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "out/UtilizeJwtProvider.dll"]
