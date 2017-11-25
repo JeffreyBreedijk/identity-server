@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using CQRSlite.Domain;
-using CQRSlite.Events;
-using Serilog;
 using UtilizeJwtProvider.Domain.Event;
 
 
@@ -22,6 +19,8 @@ namespace UtilizeJwtProvider.Domain.Aggregates
         
         public string Lastname { get; private set; }
         
+        public string LoginCode { get; private set;}
+        
         public string Email { get; private set;}
         
         public bool IsActive { get;  private set;}
@@ -34,9 +33,9 @@ namespace UtilizeJwtProvider.Domain.Aggregates
 
         public User() {}
 
-        public User(Guid id, string hash, string salt, string email)
+        public User(Guid id, string hash, string salt, string loginCode)
         {
-            ApplyChange(new UserCreatedEvent(id, Version, DateTimeOffset.UtcNow, email, hash, salt));
+            ApplyChange(new UserCreatedEvent(id, Version, DateTimeOffset.UtcNow, loginCode, hash, salt));
         }
 
         public void UpdatePassword(string hash, string salt)
@@ -82,7 +81,7 @@ namespace UtilizeJwtProvider.Domain.Aggregates
         private void Apply(UserCreatedEvent e)
         {
             Id = e.Id;
-            Email = e.Email;
+            LoginCode = e.LoginCode;
             Hash = e.Hash;
             Salt = e.Salt;
             IsActive = true;

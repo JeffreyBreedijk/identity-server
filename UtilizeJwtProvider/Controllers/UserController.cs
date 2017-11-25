@@ -14,54 +14,46 @@ namespace UtilizeJwtProvider.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly IEventRepository _eventRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IPasswordService _passwordService;
-        private readonly ILogger _logger;
+        private readonly IUserService _userService;
 
-        public UserController(ILoggerFactory loggerFactory, IEventRepository eventRepository, IUserRepository userRepository, IPasswordService passwordService)
+        public UserController(IUserService userService)
         {
-            _eventRepository = eventRepository;
-            _userRepository = userRepository;
-            _passwordService = passwordService;
-            _logger = loggerFactory.CreateLogger("UserController");
+            _userService = userService;
         }
 
-
+        //[Authorize(Roles = "ADMIN")]
+        [HttpPut]
+        public void CreateUser([FromBody] NewUser user)
+        {
+           _userService.CreateUser(user.LoginCode, user.Password);
+        }
+        
         [HttpGet]
-        public User Get()
+        [Route("{loginCode}/roles")]
+        public HashSet<string> GetRoles([FromRoute] string loginCode)
         {
-            var usr = new User(Guid.NewGuid(), "h", "s", "e");
-            _eventRepository.Save(usr);
-
-            usr.UpdatePassword("Pwd2", "Slt2");
-            _eventRepository.Save(usr);
+            var user = _userService.GetUser(loginCode);
             
-            usr.UpdateFirstnameLastname("Jeffrey", "Breedijk");
-            _eventRepository.Save(usr);
-            return null;
+            if (user?.Roles == null)
+            {
+                return new HashSet<string>();
+            }
             
+            return user.Roles;
 
         }
-
-        [Authorize(Roles = "ADMIN")]
-        [HttpPost]
-        public void Post([FromBody] NewUser user)
+        
+        [HttpPut]
+        [Route("{loginCode}/roles/{role}")]
+        public void AddRole([FromRoute] string loginCode, [FromRoute] string role )
         {
-            var name = "testname";
-            _logger.LogInformation("Adding user {name}", name);
-            if (!_userRepository.UserExists(user.Email)) return;
-            var salt = _passwordService.CreateSalt();
-            var hash = _passwordService.GetHash(user.Password, salt);
-            var usr = new User(Guid.NewGuid(), hash, salt, user.Email);
-            usr.AddRole("admin");
-            _eventRepository.Save(usr);
-            _userRepository.AddUserToCache(usr);            
+            _userService.SetUserRole(loginCode, role);
         }
+        
 
         public class NewUser
         {
-            public string Email { get; set; }
+            public string LoginCode { get; set; }
             public string Password { get; set; }
         }
     }

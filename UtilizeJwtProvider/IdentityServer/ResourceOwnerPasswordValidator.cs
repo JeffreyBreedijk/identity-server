@@ -14,12 +14,12 @@ namespace UtilizeJwtProvider.IdentityServer
 {
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly IPasswordService _passwordService;
 
-        public ResourceOwnerPasswordValidator(IUserRepository userRepository, IPasswordService passwordService)
+        public ResourceOwnerPasswordValidator(IUserService userService, IPasswordService passwordService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _passwordService = passwordService;
         }
 
@@ -27,7 +27,7 @@ namespace UtilizeJwtProvider.IdentityServer
         {
             try
             {
-                var user = _userRepository.FindUserByEmail(context.UserName);
+                var user = _userService.GetUser(context.UserName);
                 if (user != null)
                 {
                     if (_passwordService.ValidatePassword(context.Password, user.Salt, user.Hash))

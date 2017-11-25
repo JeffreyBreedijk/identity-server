@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
@@ -53,15 +54,16 @@ namespace UtilizeJwtProvider
             
             // Configure other services
             services.AddTransient<IPasswordService, PkcsSha256PasswordService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAggregateFactory, AggregateFactory>();
             services.AddSingleton<IUserRepository, InMemoryUserRepository>();
             
+            services.AddMemoryCache();
             services.AddMvc();
 
             // Configure IdentityServer
             services.AddIdentityServer()
-                .AddTemporarySigningCredential()
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
@@ -78,7 +80,8 @@ namespace UtilizeJwtProvider
 
             loggerFactory.AddSerilog();
 
-            app.UseIdentityServerAuthentication(JwtBearerOptions(env.IsDevelopment()));
+            
+           // app.UseIdentityServerAuthentication(JwtBearerOptions(env.IsDevelopment()));
 
             app.UseMvc();
             app.UseIdentityServer();
@@ -91,16 +94,10 @@ namespace UtilizeJwtProvider
             var bearerOptions = new IdentityServerAuthenticationOptions
             {
                 Authority = "http://localhost:5000/",
-                ApiName = "Utilize API",
-
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
+                ApiName = "Utilize API"
             };
 
-            if (isStaging)
-            {
-                bearerOptions.RequireHttpsMetadata = false;
-            }
+           
             return bearerOptions;
         }
     }

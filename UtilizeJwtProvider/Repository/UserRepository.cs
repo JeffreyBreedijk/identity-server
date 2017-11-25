@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using UtilizeJwtProvider.DataSources;
 using UtilizeJwtProvider.Domain.Aggregates;
 
@@ -7,29 +7,57 @@ namespace UtilizeJwtProvider.Repository
 {
     public interface IUserRepository
     {
-        User FindUserByEmail(string email);
-        bool UserExists(string email);
         void AddUserToCache(User user);
+        User FindUserByLoginCode(string loginCode);
+        bool UserExists(string loginCode);
     }
 
     public class InMemoryUserRepository : IUserRepository
     {
-        private readonly HashSet<User> _users;
+        private readonly IMemoryCache _cache;
+        private readonly EventDbContext _eventDbContext;
+        private readonly IEventRepository _eventRepository;
 
-        public InMemoryUserRepository(EventDbContext dbContext, IEventRepository eventRepository)
+        public InMemoryUserRepository(EventDbContext dbContext, IEventRepository eventRepository, IMemoryCache memoryCache)
         {
+            _cache = memoryCache;
+            _eventDbContext = dbContext;
+            _eventRepository = eventRepository;
             dbContext.Database.EnsureCreated();
-            _users = new HashSet<User>(dbContext.Events
-                    .Where(e => e.AggregateType.Equals("User"))
-                    .Select(e => e.AggregateId)
-                    .Distinct()
-                    .Select(eventRepository.GetById<User>));
+            PopulateCache();
         }
 
-        public User FindUserByEmail(string email) => _users.FirstOrDefault(u => u.Email.Equals(email));
+        private void PopulateCache()
+        {
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetPriority(CacheItemPriority.NeverRemove);
+            foreach (var user in _eventDbContext.Events
+                .Where(e => e.AggregateType.Equals("User"))
+                .Select(e => e.AggregateId)
+                .Distinct().AsEnumerable()
+                .Select(_eventRepository.GetById<User>))
+            {
+                _cache.Set(user.LoginCode, user, cacheEntryOptions);
+            }
+        }
 
-        public bool UserExists(string email) => FindUserByEmail(email) == null;
+        public void AddUserToCache(User user)
+        {
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetPriority(CacheItemPriority.NeverRemove);
+            _cache.Set(user.LoginCode, user, cacheEntryOptions);
+        }
 
-        public void AddUserToCache(User user) => _users.Add(user);
+        public User FindUserByLoginCode(string loginCode)
+        {
+            return _cache.TryGetValue(loginCode, out User cacheEntry) ? cacheEntry : null;
+        }
+
+        public bool UserExists(string loginCode)
+        {
+            return _cache.TryGetValue(loginCode, out User _);
+        }
+
+
     }
 }

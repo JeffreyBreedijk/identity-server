@@ -5,16 +5,16 @@ namespace UtilizeJwtProvider.Domain.Event
 {
     public class UserCreatedEvent : IEvent
     {
-        public readonly string Email;
+        public readonly string LoginCode;
         public readonly string Hash;
         public readonly string Salt;
         
-        public UserCreatedEvent(Guid id, int version, DateTimeOffset timestamp, string email, string hash, string salt)
+        public UserCreatedEvent(Guid id, int version, DateTimeOffset timestamp, string loginCode, string hash, string salt)
         {
             Id = id;
             Version = version;
             TimeStamp = timestamp;
-            Email = email;
+            LoginCode = loginCode;
             Hash = hash;
             Salt = salt;
         }
