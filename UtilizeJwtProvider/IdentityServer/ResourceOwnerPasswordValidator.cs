@@ -33,7 +33,7 @@ namespace UtilizeJwtProvider.IdentityServer
                     if (_passwordService.ValidatePassword(context.Password, user.Salt, user.Hash))
                     {
                         context.Result = new GrantValidationResult(
-                            subject: user.Email.ToString(),
+                            subject: user.LoginCode.ToString(),
                             authenticationMethod: "custom",
                             claims: GetUserClaims(user));
 
@@ -57,7 +57,7 @@ namespace UtilizeJwtProvider.IdentityServer
           
             var claims = new List<Claim>()
             {
-                new Claim("user_id", user.Id.ToString() ?? ""),
+                new Claim("user_id", user.LoginCode.ToString() ?? ""),
                 new Claim(type: JwtClaimTypes.Name,
                     value: (!string.IsNullOrEmpty(user.Firstname) && !string.IsNullOrEmpty(user.Lastname))
                         ? (user.Firstname + " " + user.Lastname)

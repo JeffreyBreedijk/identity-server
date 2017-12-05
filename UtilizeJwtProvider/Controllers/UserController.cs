@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using UtilizeJwtProvider.Domain.Aggregates;
-using UtilizeJwtProvider.Repository;
 using UtilizeJwtProvider.Services;
 
 
 namespace UtilizeJwtProvider.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 
@@ -21,7 +16,6 @@ namespace UtilizeJwtProvider.Controllers
             _userService = userService;
         }
 
-        //[Authorize(Roles = "ADMIN")]
         [HttpPut]
         public void CreateUser([FromBody] NewUser user)
         {
@@ -31,18 +25,10 @@ namespace UtilizeJwtProvider.Controllers
         [HttpGet]
         [Route("{loginCode}/roles")]
         public HashSet<string> GetRoles([FromRoute] string loginCode)
-        {
-            var user = _userService.GetUser(loginCode);
-            
-            if (user?.Roles == null)
-            {
-                return new HashSet<string>();
-            }
-            
-            return user.Roles;
-
+        {   
+            return _userService.GetUser(loginCode)?.Roles ?? new HashSet<string>();
         }
-        
+     
         [HttpPut]
         [Route("{loginCode}/roles/{role}")]
         public void AddRole([FromRoute] string loginCode, [FromRoute] string role )

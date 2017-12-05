@@ -1,19 +1,12 @@
-﻿using System;
-using System.Text;
-using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.AspNetIdentity;
-using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Authorization;
+﻿using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.Elasticsearch;
 using UtilizeJwtProvider.DataSources;
 using UtilizeJwtProvider.IdentityServer;
 using UtilizeJwtProvider.Repository;
@@ -60,14 +53,37 @@ namespace UtilizeJwtProvider
             services.AddSingleton<IUserRepository, InMemoryUserRepository>();
             
             services.AddMemoryCache();
-            services.AddMvc();
+            //services.AddMvc();
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
 
+
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:5000";
+                    options.RequireHttpsMetadata = false;
+
+                    options.ApiName = "Utilize API";
+                });
+            
+//            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+//                .AddIdentityServerAuthentication(options =>
+//                {
+//                    options.Authority = "http://localhost:5000/";
+//                    options.ApiName = "Utilize API";
+//                });
+//            
+            
             // Configure IdentityServer
             services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
 
+           // services.AddMvc();
             services.AddLogging();
         }
 
@@ -80,25 +96,13 @@ namespace UtilizeJwtProvider
 
             loggerFactory.AddSerilog();
 
-            
-           // app.UseIdentityServerAuthentication(JwtBearerOptions(env.IsDevelopment()));
-
+            app.UseAuthentication();
             app.UseMvc();
             app.UseIdentityServer();
             
+            
 
         }
-        
-        private static IdentityServerAuthenticationOptions JwtBearerOptions(bool isStaging)
-        {
-            var bearerOptions = new IdentityServerAuthenticationOptions
-            {
-                Authority = "http://localhost:5000/",
-                ApiName = "Utilize API"
-            };
 
-           
-            return bearerOptions;
-        }
     }
 }
