@@ -50,7 +50,8 @@ namespace UtilizeJwtProvider
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAggregateFactory, AggregateFactory>();
-            services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            services.AddTransient<IUserCache, UserCache>();
+            services.AddTransient<ICacheWarmer, CacheWarmer>();
             
             services.AddMemoryCache();
             //services.AddMvc();
@@ -85,10 +86,11 @@ namespace UtilizeJwtProvider
 
            // services.AddMvc();
             services.AddLogging();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ICacheWarmer cacheWarmer)
         {
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -100,8 +102,8 @@ namespace UtilizeJwtProvider
             app.UseMvc();
             app.UseIdentityServer();
             
-            
-
+            cacheWarmer.WarmCache();
+           
         }
 
     }

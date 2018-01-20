@@ -13,35 +13,35 @@ namespace UtilizeJwtProvider.Services
 
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserCache _userCache;
         private readonly IPasswordService _passwordService;
         private readonly IEventRepository _eventRepository;
 
-        public UserService(IUserRepository userRepository, IPasswordService passwordService, IEventRepository eventRepository)
+        public UserService(IUserCache userCache, IPasswordService passwordService, IEventRepository eventRepository)
         {
-            _userRepository = userRepository;
+            _userCache = userCache;
             _passwordService = passwordService;
             _eventRepository = eventRepository;
         }
         
         public User GetUser(string loginCode)
         {
-            return _userRepository.FindUserByLoginCode(loginCode);
+            return _userCache.FindUserByLoginCode(loginCode);
         }
         
         public void CreateUser(string loginCode, string password)
         {
-            if (_userRepository.UserExists(loginCode)) return;
+            if (_userCache.UserExists(loginCode)) return;
             var salt = _passwordService.CreateSalt();
             var hash = _passwordService.GetHash(password, salt);
             var usr = new User(Guid.NewGuid(), hash, salt, loginCode);
             _eventRepository.Save(usr);
-            _userRepository.AddUserToCache(usr);        
+            _userCache.AddUserToCache(usr);        
         } 
         
         public void SetUserRole(string loginCode, string role)
         {
-            var user = _userRepository.FindUserByLoginCode(loginCode);
+            var user = _userCache.FindUserByLoginCode(loginCode);
             user.AddRole(role);
             _eventRepository.Save(user);
         }
