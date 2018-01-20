@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using System.Net;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Serilog;
-using Serilog.Sinks.Elasticsearch;
 
 namespace UtilizeJwtProvider
 {
@@ -14,17 +8,18 @@ namespace UtilizeJwtProvider
     {
         public static void Main(string[] args)
         {
-            
- 
-            
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
 
-            host.Run();
+            BuildWebHost(args).Run();
         }
+
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .UseKestrel(options =>
+                {
+                    options.Listen(IPAddress.Loopback, 5000,
+                        listenOptions => { listenOptions.UseHttps("Certs/ks.pfx", "utilize"); });
+                })
+                .Build();
     }
 }
