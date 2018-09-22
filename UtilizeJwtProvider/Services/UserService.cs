@@ -1,49 +1,64 @@
 ﻿using System;
-using UtilizeJwtProvider.Domain.Aggregates;
+using System.Security.Cryptography;
+using System.Text;
+using UtilizeJwtProvider.Models;
 using UtilizeJwtProvider.Repository;
 
 namespace UtilizeJwtProvider.Services
 {
     public interface IUserService
     {
-        User GetUser(string loginCode);
-        void CreateUser(string loginCode, string password);
-        void SetUserRole(string loginCode, string role);
+        User GetUser(string tenantId, string loginCode);
+        void CreateUser(string tenantId, string loginCode, string password);
     }
 
     public class UserService : IUserService
     {
-        private readonly IUserCache _userCache;
         private readonly IPasswordService _passwordService;
-        private readonly IEventRepository _eventRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IUserCache userCache, IPasswordService passwordService, IEventRepository eventRepository)
+        public UserService(IPasswordService passwordService, IUserRepository userRepository)
         {
-            _userCache = userCache;
             _passwordService = passwordService;
-            _eventRepository = eventRepository;
+            _userRepository = userRepository;
+        }
+
+        public User GetUser(string tenantId, string loginCode)
+        {
+            return _userRepository.GetUser(tenantId, loginCode);
         }
         
-        public User GetUser(string loginCode)
+        public void CreateUser(string tenantId, string loginCode, string password)
         {
-            return _userCache.FindUserByLoginCode(loginCode);
-        }
-        
-        public void CreateUser(string loginCode, string password)
-        {
-            if (_userCache.UserExists(loginCode)) return;
+            
+            if (_userRepository.UserExists(tenantId, loginCode)) return;
+            
             var salt = _passwordService.CreateSalt();
             var hash = _passwordService.GetHash(password, salt);
-            var usr = new User(Guid.NewGuid(), hash, salt, loginCode);
-            _eventRepository.Save(usr);
-            _userCache.AddUserToCache(usr);        
+            var usr = new User()
+            {
+                Id = GetUserHash(tenantId, loginCode),
+                TenantId = tenantId,
+                LoginCode = loginCode,
+                Hash = hash,
+                Salt = salt
+            };
+            _userRepository.CreateUser(usr);      
         } 
         
-        public void SetUserRole(string loginCode, string role)
+        private string GetUserHash(string tenantId, string loginCode)
         {
-            var user = _userCache.FindUserByLoginCode(loginCode);
-            user.AddRole(role);
-            _eventRepository.Save(user);
+            var sha1 = SHA1.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(tenantId + loginCode);
+            var hash = sha1.ComputeHash(inputBytes);
+
+            var sb = new StringBuilder();
+            foreach (var t in hash)
+            {
+                sb.Append(t.ToString("X2"));
+            }
+            return sb.ToString();
         }
+      
     }
 }

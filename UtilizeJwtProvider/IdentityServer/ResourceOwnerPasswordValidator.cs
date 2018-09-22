@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
-using UtilizeJwtProvider.Domain.Aggregates;
+using UtilizeJwtProvider.Models;
 using UtilizeJwtProvider.Repository;
 using UtilizeJwtProvider.Services;
 
@@ -27,7 +27,7 @@ namespace UtilizeJwtProvider.IdentityServer
         {
             try
             {
-                var user = _userService.GetUser(context.UserName);
+                var user = _userService.GetUser(context.Request.Client.ClientId, context.UserName);
                 if (user != null)
                 {
                     if (_passwordService.ValidatePassword(context.Password, user.Salt, user.Hash))
@@ -72,7 +72,7 @@ namespace UtilizeJwtProvider.IdentityServer
               
             };
             
-            user.Roles.ToList().ForEach(r => claims.Add(new Claim(JwtClaimTypes.Role, r)));
+            //user.Roles.ToList().ForEach(r => claims.Add(new Claim(JwtClaimTypes.Role, r)));
 
             return claims.ToArray();
         }
