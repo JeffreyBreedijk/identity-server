@@ -56,7 +56,9 @@ namespace UtilizeJwtProvider.Controllers
                     JwtClaimTypes.FamilyName,
                     JwtClaimTypes.GivenName,
                     JwtClaimTypes.Role,
-                    "debtor_id"
+                    "debtor_id",
+                    "permissions",
+                    "licences"
                 }
             };
             resourceModel.Scopes.Add(scope);

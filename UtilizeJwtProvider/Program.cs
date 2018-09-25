@@ -15,11 +15,11 @@ namespace UtilizeJwtProvider
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Loopback, 5000,
-                        listenOptions => { listenOptions.UseHttps("Certs/ks.pfx", "utilize"); });
-                })
+//                .UseKestrel(options =>
+//                {
+//                    options.Listen(IPAddress.Loopback, 5000,
+//                        listenOptions => { listenOptions.UseHttps("Certs/ks.pfx", "utilize"); });
+//                })
                 .Build();
     }
 }

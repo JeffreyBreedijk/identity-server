@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
+using Newtonsoft.Json;
 using UtilizeJwtProvider.Models;
 using UtilizeJwtProvider.Repository;
 using UtilizeJwtProvider.Services;
@@ -66,6 +67,8 @@ namespace UtilizeJwtProvider.IdentityServer
                 new Claim(JwtClaimTypes.FamilyName, user.Lastname ?? ""),
                 new Claim(JwtClaimTypes.Email, user.Email ?? ""),
                 new Claim("debtor_id", user.DebtorId ?? ""),
+                new Claim("permissions", JsonConvert.SerializeObject(new List<string>() {"testpermission"})),
+                new Claim("licences", JsonConvert.SerializeObject(new List<string>() {"testlicence"}))
 
                 
                 
