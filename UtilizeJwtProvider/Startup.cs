@@ -1,8 +1,11 @@
 ﻿
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using IdentityModel;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -46,13 +49,22 @@ namespace UtilizeJwtProvider
                 $"pwd={Configuration["Database:Password"]};";
 
             // Configure DB connection
-            services.AddDbContext<UserDbContext>(options =>
+            services.AddDbContext<AuthDbContext>(options =>
                 options.UseMySql(@dbConnectionString));
+            
 
             // Configure other services
             services.AddTransient<IPasswordService, PkcsSha256PasswordService>();
+            
+            // Services
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUserRepository, SqlUserRepository>();
+            services.AddTransient<ITenantService, TenantService>();
+            services.AddTransient<IPermissionSchemeService, PermissionSchemeService>();
+            
+            // Repositories
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITenantRepository, TenantRepository>();
+            services.AddTransient<IPermissionSchemeRepository, PermissionSchemeRepository>();
 
             services.AddMvcCore()
                 .AddAuthorization()
@@ -68,14 +80,20 @@ namespace UtilizeJwtProvider
                             sql => sql.MigrationsAssembly(migrationsAssembly));
                 }) 
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
+            
 
+            
+            
+            
+            
             // services.AddMvc();
             services.AddLogging();
             //services.Configure<MvcOptions>(options => { options.Filters.Add(new RequireHttpsAttribute()); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            ConfigurationDbContext configurationDbContext)
         {
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -84,9 +102,64 @@ namespace UtilizeJwtProvider
             app.UseAuthentication();
             app.UseMvc();
             app.UseIdentityServer();
+            
+            
+            SetDefaultApiResource(configurationDbContext);
         }
 
-       
+        private static void SetDefaultApiResource(ConfigurationDbContext configurationDbContext)
+        {
+            var scope = new Scope()
+            {
+                Name = "default",
+                DisplayName = "default",
+                UserClaims =
+                {
+                    JwtClaimTypes.Name,
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.FamilyName,
+                    JwtClaimTypes.GivenName,
+                    "debtor_id",
+                    "permissions"
+                }
+            };
+            
+            var resource = configurationDbContext.ApiResources.AsNoTracking().FirstOrDefault(r => r.Name.Equals("Default Resource"));
+            if (resource != null) return;
+            var defaultResource = new ApiResource
+            {
+                Name = "Default Resource",
+                Scopes = new List<Scope>()
+                {
+                    new Scope()
+                    {
+                        Name = "default",
+                        DisplayName = "default",
+                        UserClaims =
+                        {
+                            JwtClaimTypes.Name,
+                            JwtClaimTypes.Email,
+                            JwtClaimTypes.FamilyName,
+                            JwtClaimTypes.GivenName,
+                            "debtor_id",
+                            "permissions"
+                        }
+                    }
+                }
+            };
+
+            configurationDbContext.ApiResources.Add(defaultResource.ToEntity());
+            configurationDbContext.SaveChanges();
+
+
+
+
+
+
+
+
+
+        }
     }
 
 

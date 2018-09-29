@@ -5,7 +5,7 @@ namespace UtilizeJwtProvider.Models
 {
     public class Licence
     {
-        [Key] private Guid Id { get; }
+        [Key] public Guid Id { get; set; }
         public string Name { get; set; }
 
         public Licence()

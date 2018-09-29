@@ -9,7 +9,7 @@ namespace UtilizeJwtProvider.Models
         [Key]
         public string Id { get; set; }
         
-        public string TenantId { get; set; }
+        public Tenant Tenant { get; set; }
         
         public string LoginCode { get; set;}
         

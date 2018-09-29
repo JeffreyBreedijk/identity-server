@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace UtilizeJwtProvider.Models
+namespace UserManager.Models
 {
     public class Permission
     {
-        [Key] public Guid Id { get; set; }
-        public string Name { get; set; }
-        public Tenant Tenant { get; set; }
+        [Key] private Guid Id { get;  }
+        public Licence Licence { get; set; }
+        public Role Role { get; set; }
 
         public Permission()
         {

@@ -9,7 +9,7 @@ namespace UtilizeJwtProvider.Services
     public interface IUserService
     {
         User GetUser(string tenantId, string loginCode);
-        void CreateUser(string tenantId, string loginCode, string password);
+        void CreateUser(Tenant tenant, string loginCode, string password);
     }
 
     public class UserService : IUserService
@@ -28,17 +28,17 @@ namespace UtilizeJwtProvider.Services
             return _userRepository.GetUser(tenantId, loginCode);
         }
         
-        public void CreateUser(string tenantId, string loginCode, string password)
+        public void CreateUser(Tenant tenant, string loginCode, string password)
         {
             
-            if (_userRepository.UserExists(tenantId, loginCode)) return;
+            if (_userRepository.UserExists(tenant.Id, loginCode)) return;
             
             var salt = _passwordService.CreateSalt();
             var hash = _passwordService.GetHash(password, salt);
             var usr = new User()
             {
-                Id = GetUserHash(tenantId, loginCode),
-                TenantId = tenantId,
+                Id = GetUserHash(tenant.Id, loginCode),
+                Tenant = tenant,
                 LoginCode = loginCode,
                 Hash = hash,
                 Salt = salt
