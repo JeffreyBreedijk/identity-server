@@ -1,11 +1,8 @@
 ﻿using System.Linq;
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
-using IdentityServer4.Models;
-using Utilize.Identity.Shared.DataSources;
-using Utilize.Identity.Shared.Models;
+using Utilize.Identity.Provider.DataSources;
+using Utilize.Identity.Provider.Models;
 
-namespace Utilize.Identity.Shared.Repository
+namespace Utilize.Identity.Provider.Repository
 {
     public interface ITenantRepository
     {
@@ -27,7 +24,7 @@ namespace Utilize.Identity.Shared.Repository
         {
             _authDbContext.Tenants.Add(tenant);
             _authDbContext.SaveChanges();
-           
+
         }
 
         public void UpdateTenant(Tenant tenant)

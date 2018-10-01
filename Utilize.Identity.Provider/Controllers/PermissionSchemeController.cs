@@ -3,8 +3,11 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Utilize.Identity.Shared.DTO;
 using Utilize.Identity.Shared.Services;
+using IPermissionSchemeService = Utilize.Identity.Provider.Services.IPermissionSchemeService;
+using ITenantService = Utilize.Identity.Provider.Services.ITenantService;
+using PermissionSchemeDto = Utilize.Identity.Provider.DTO.PermissionSchemeDto;
 
-namespace Utilize.Identity.Manager.Controllers
+namespace Utilize.Identity.Provider.Controllers
 {
     [Route("[controller]")]
     public class PermissionSchemeController : Controller

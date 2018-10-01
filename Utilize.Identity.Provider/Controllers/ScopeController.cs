@@ -3,44 +3,24 @@ using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Utilize.Identity.Shared.DTO;
-using Utilize.Identity.Shared.Services;
+using Utilize.Identity.Provider.Services;
 
-namespace Utilize.Identity.Manager.Controllers
+namespace Utilize.Identity.Provider.Controllers
 {
     [Route("[controller]")]
-    public class TenantController : Controller
+    public class ScopeController  : ControllerBase
     {
-        private readonly ITenantService _tenantService;
         private readonly ConfigurationDbContext _configurationDbContext;
+        private readonly ITenantService _tenantService;
 
-        public TenantController(ITenantService tenantService, ConfigurationDbContext configurationDbContext)
+        public ScopeController(ConfigurationDbContext configurationDbContext, ITenantService tenantService)
         {
-            _tenantService = tenantService;
             _configurationDbContext = configurationDbContext;
+            _tenantService = tenantService;
         }
 
-        [HttpGet]
-        [Route("{tenantId}")]
-        public ActionResult<TenantDto> GetTenant([FromRoute] string tenantId)
-        {
-            var tenant = _tenantService.GetTenant(tenantId);
-            if (tenant == null)
-                return NotFound();
-            return tenant.ToDto();
-        }    
-                
         [HttpPost]
-        [Route("{tenantId}")]
-        public ActionResult UpdateTenant([FromRoute] string tenantId)
-        {
-            _tenantService.CreateTenant(tenantId);
-
-            return NoContent();
-        }
-        
-        [HttpPost]
-        [Route("{tenantId}/scope/{scopeId}")]
+        [Route("{scopeId}")]
         public ActionResult AddScope([FromRoute] string tenantId, [FromRoute] string scopeId)
         {
             // todo: check existence of scope
@@ -59,6 +39,7 @@ namespace Utilize.Identity.Manager.Controllers
             _configurationDbContext.SaveChanges();
             return NoContent();
         } 
+        
         
     }
 }

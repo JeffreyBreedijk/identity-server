@@ -8,6 +8,9 @@ using IdentityServer4.Validation;
 using Newtonsoft.Json;
 using Utilize.Identity.Shared.Models;
 using Utilize.Identity.Shared.Services;
+using IPasswordService = Utilize.Identity.Provider.Services.IPasswordService;
+using IUserService = Utilize.Identity.Provider.Services.IUserService;
+using User = Utilize.Identity.Provider.Models.User;
 
 namespace Utilize.Identity.Provider.IdentityServer
 {

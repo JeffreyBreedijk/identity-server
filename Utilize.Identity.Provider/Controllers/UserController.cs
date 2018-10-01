@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Utilize.Identity.Shared.Services;
+using Utilize.Identity.Provider.Services;
 
-namespace Utilize.Identity.Manager.Controllers
+namespace Utilize.Identity.Provider.Controllers
 {
     [Route("[controller]")]
     public class UserController : ControllerBase
