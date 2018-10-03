@@ -1,13 +1,15 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Utilize.Identity.Provider.DTO;
 
 namespace Utilize.Identity.Provider.Models
 {
+    [Table(name:"permissionschemes")]
     public class PermissionScheme
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Tenant Tenant { get; set; }
+        public string Tenant { get; set; }
         public bool IsActive { get; set; }
 
         public PermissionSchemeDto ToDto()
@@ -26,4 +28,6 @@ namespace Utilize.Identity.Provider.Models
             IsActive = dto.IsActive;
         }
     }
+    
+    
 }

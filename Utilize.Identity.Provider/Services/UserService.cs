@@ -1,5 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Utilize.Identity.Provider.DataSources;
 using Utilize.Identity.Provider.Models;
 using Utilize.Identity.Provider.Repository;
 
@@ -7,42 +11,41 @@ namespace Utilize.Identity.Provider.Services
 {
     public interface IUserService
     {
-        User GetUser(string tenantId, string loginCode);
-        void CreateUser(Tenant tenant, string loginCode, string password);
+        Task<User> GetUser(string tenantId, string loginCode);
+        Task CreateUser(string clientId, string loginCode, string password);
     }
 
     public class UserService : IUserService
     {
         private readonly IPasswordService _passwordService;
-        private readonly IUserRepository _userRepository;
-
-        public UserService(IPasswordService passwordService, IUserRepository userRepository)
+        private readonly AuthDbContext _authDbContext;
+        
+        public UserService(IPasswordService passwordService, AuthDbContext authDbContext)
         {
             _passwordService = passwordService;
-            _userRepository = userRepository;
+            _authDbContext = authDbContext;
         }
 
-        public User GetUser(string tenantId, string loginCode)
+        public async Task<User> GetUser(string tenantId, string loginCode)
         {
-            return _userRepository.GetUser(tenantId, loginCode);
+            return await _authDbContext.Users.FirstOrDefaultAsync(u => u.LoginCode.Equals(loginCode) && u.Tenant.Equals(tenantId));
         }
         
-        public void CreateUser(Tenant tenant, string loginCode, string password)
+        public async Task CreateUser(string clientId, string loginCode, string password)
         {
-            
-            if (_userRepository.UserExists(tenant.Id, loginCode)) return;
-            
+           
             var salt = _passwordService.CreateSalt();
             var hash = _passwordService.GetHash(password, salt);
             var usr = new User()
             {
-                Id = GetUserHash(tenant.Id, loginCode),
-                Tenant = tenant,
+                Id = GetUserHash(clientId, loginCode),
+                Tenant = clientId,
                 LoginCode = loginCode,
                 Hash = hash,
                 Salt = salt
             };
-            _userRepository.CreateUser(usr);      
+            await _authDbContext.Users.AddAsync(usr);
+            await _authDbContext.SaveChangesAsync();  
         } 
         
         private string GetUserHash(string tenantId, string loginCode)

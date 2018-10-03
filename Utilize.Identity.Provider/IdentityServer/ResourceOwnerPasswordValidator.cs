@@ -6,11 +6,9 @@ using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using Newtonsoft.Json;
-using Utilize.Identity.Shared.Models;
-using Utilize.Identity.Shared.Services;
+using Utilize.Identity.Provider.Models;
 using IPasswordService = Utilize.Identity.Provider.Services.IPasswordService;
 using IUserService = Utilize.Identity.Provider.Services.IUserService;
-using User = Utilize.Identity.Provider.Models.User;
 
 namespace Utilize.Identity.Provider.IdentityServer
 {
@@ -29,7 +27,7 @@ namespace Utilize.Identity.Provider.IdentityServer
         {
             try
             {
-                var user = _userService.GetUser(context.Request.Client.ClientId, context.UserName);
+                var user = _userService.GetUser(context.Request.Client.ClientId, context.UserName).Result;
                 if (user != null)
                 {
                     if (_passwordService.ValidatePassword(context.Password, user.Salt, user.Hash))

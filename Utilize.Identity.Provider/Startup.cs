@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using IdentityModel;
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
@@ -12,29 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
+using Npgsql;
 using Utilize.Identity.Provider.IdentityServer;
 using Utilize.Identity.Provider.Options;
 using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Services;
-using Utilize.Identity.Shared.DataSources;
-using Utilize.Identity.Shared.Repository;
-using Utilize.Identity.Shared.Services;
 using AuthDbContext = Utilize.Identity.Provider.DataSources.AuthDbContext;
 using IPasswordService = Utilize.Identity.Provider.Services.IPasswordService;
-using IPermissionSchemeRepository = Utilize.Identity.Provider.Repository.IPermissionSchemeRepository;
 using IPermissionSchemeService = Utilize.Identity.Provider.Services.IPermissionSchemeService;
-using ITenantRepository = Utilize.Identity.Provider.Repository.ITenantRepository;
-using ITenantService = Utilize.Identity.Provider.Services.ITenantService;
-using IUserRepository = Utilize.Identity.Provider.Repository.IUserRepository;
 using IUserService = Utilize.Identity.Provider.Services.IUserService;
-using PermissionSchemeRepository = Utilize.Identity.Provider.Repository.PermissionSchemeRepository;
 using PermissionSchemeService = Utilize.Identity.Provider.Services.PermissionSchemeService;
 using PkcsSha256PasswordService = Utilize.Identity.Provider.Services.PkcsSha256PasswordService;
-using TenantRepository = Utilize.Identity.Provider.Repository.TenantRepository;
-using TenantService = Utilize.Identity.Provider.Services.TenantService;
-using UserRepository = Utilize.Identity.Provider.Repository.UserRepository;
 using UserService = Utilize.Identity.Provider.Services.UserService;
 
 namespace Utilize.Identity.Provider
@@ -59,16 +46,18 @@ namespace Utilize.Identity.Provider
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var dbConnectionString =
-                $"Server={Configuration["Database:Host"]};" +
-                $"database={Configuration["Database:Name"]};" +
-                $"uid={Configuration["Database:Username"]};" +
-                $"pwd={Configuration["Database:Password"]};";
+                new NpgsqlConnectionStringBuilder
+                {
+                    Host = "localhost",
+                    Port = 26257,
+                    Username = "utilize",
+                    Database = "identity"
+                }.ConnectionString;
 
             // Configure DB connection
             services.AddDbContext<AuthDbContext>(options =>
-                options.UseMySql(@dbConnectionString));
+                options.UseNpgsql(@dbConnectionString));
             
 
             // Configure other services
@@ -76,18 +65,14 @@ namespace Utilize.Identity.Provider
             
             // Services
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ITenantService, TenantService>();
             services.AddTransient<IPermissionSchemeService, PermissionSchemeService>();
             
-            // Repositories
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ITenantRepository, TenantRepository>();
-            services.AddTransient<IPermissionSchemeRepository, PermissionSchemeRepository>();
 
             services.Configure<ConfigurationOptions>(Configuration);
-            services.AddTransient<IClientStore, CustomClientStore>();
-            services.AddTransient<IResourceStore, CustomResourceStore>();
-            services.AddTransient<IRepository, MongoRepository>();
+            services.AddTransient<IClientStore, ClientService>();
+            services.AddTransient<IClientWriteStore, ClientService>();
+            services.AddTransient<IResourceStore, ResourceService>();
+            services.AddTransient<IIdentityServerRepository, MongoIdentityServerRepository>();
 
             services.AddMvcCore()
                 .AddAuthorization()
@@ -96,8 +81,8 @@ namespace Utilize.Identity.Provider
             // Configure IdentityServer
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
-                .AddClientStore<CustomClientStore>()
-                .AddResourceStore<CustomResourceStore>()
+                .AddClientStore<ClientService>()
+                .AddResourceStore<ResourceService>()
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
             
 
@@ -112,7 +97,7 @@ namespace Utilize.Identity.Provider
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
-            IRepository repository)
+            IIdentityServerRepository identityServerRepository, IOptions<ConfigurationOptions> optionsAccessor)
         {
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -123,13 +108,16 @@ namespace Utilize.Identity.Provider
             app.UseIdentityServer();
             
             ConfigureMongoDriver2IgnoreExtraElements();
-            Seed(repository);
+            Seed(identityServerRepository);
+            
+           
+
         }
 
-        private static void Seed(IRepository repository)
+        private static void Seed(IIdentityServerRepository identityServerRepository)
         {
             
-            if (!repository.CollectionExists<ApiResource>())
+            if (!identityServerRepository.CollectionExists<ApiResource>())
             {
                 var defaultResource = new ApiResource
             {
@@ -153,7 +141,7 @@ namespace Utilize.Identity.Provider
                 }
             };
 
-                    repository.Add<ApiResource>(defaultResource);
+                    identityServerRepository.Add<ApiResource>(defaultResource);
 
             }
         }

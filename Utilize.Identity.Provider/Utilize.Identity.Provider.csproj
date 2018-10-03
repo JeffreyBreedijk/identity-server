@@ -6,6 +6,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+      <PackageReference Include="BouncyCastle.NetCore" Version="1.8.3"/>
+      <PackageReference Include="Dapper" Version="1.50.5"/>
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
@@ -13,9 +15,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
     <PackageReference Include="MongoDB.Driver.Core" Version="2.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+      <PackageReference Include="Npgsql" Version="4.0.3"/>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2"/>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Utilize.Identity.Shared\Utilize.Identity.Shared.csproj" />
   </ItemGroup>
 </Project>

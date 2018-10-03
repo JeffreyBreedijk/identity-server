@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Utilize.Identity.Provider.DataSources;
 using Utilize.Identity.Provider.DTO;
 using Utilize.Identity.Provider.Models;
 using Utilize.Identity.Provider.Repository;
@@ -9,53 +12,40 @@ namespace Utilize.Identity.Provider.Services
 {
     public interface IPermissionSchemeService
     {
-        void CreatePermissionScheme(Tenant tenant, PermissionSchemeDto permissionSchemeDto);
-        void ActivatePermissionScheme(Tenant tenant, PermissionScheme permissionScheme);
-        PermissionScheme GetDefaultPermissionScheme();
-        List<PermissionScheme> GetPermissionSchemesForTenant(Tenant tenant);
+        Task CreatePermissionScheme(string clientId, PermissionSchemeDto permissionSchemeDto);
+        Task<PermissionScheme> GetDefaultPermissionScheme();
+        Task<List<PermissionScheme>> GetPermissionSchemesForTenant(string clientId);
     }
 
     public class PermissionSchemeService : IPermissionSchemeService
     {
-        private readonly IPermissionSchemeRepository _permissionSchemeRepository;
+        private readonly AuthDbContext _authDbContext;
 
-        public PermissionSchemeService(IPermissionSchemeRepository permissionSchemeRepository)
+        public PermissionSchemeService(AuthDbContext authDbContext)
         {
-            _permissionSchemeRepository = permissionSchemeRepository;
+            _authDbContext = authDbContext;
         }
 
-        public void CreatePermissionScheme(Tenant tenant, PermissionSchemeDto permissionSchemeDto)
+        public async Task CreatePermissionScheme(string clientId, PermissionSchemeDto permissionSchemeDto)
         {
-            _permissionSchemeRepository.CreatePermissionScheme(new PermissionScheme()
+            await _authDbContext.PermissionSchemes.AddAsync(new PermissionScheme()
             {
                 Id = Guid.NewGuid(),
                 IsActive = permissionSchemeDto.IsActive,
                 Name = permissionSchemeDto.Name,
-                Tenant = tenant
+                Tenant = clientId
             });
+            await _authDbContext.SaveChangesAsync();
         }
 
-        public List<PermissionScheme> GetPermissionSchemesForTenant(Tenant tenant)
+        public Task<PermissionScheme> GetDefaultPermissionScheme()
         {
-            return _permissionSchemeRepository.GetPermissionSchemeByTenant(tenant);
-        }
-        
-        public void ActivatePermissionScheme(Tenant tenant, PermissionScheme permissionScheme)
-        {
-            foreach (var scheme in _permissionSchemeRepository.GetPermissionSchemeByTenant(tenant)
-                .Where(s => !s.Equals(permissionScheme)))
-            {
-                scheme.IsActive = false;
-                _permissionSchemeRepository.UpdatePermissionScheme(scheme);
-            }
-
-            permissionScheme.IsActive = true;
-            _permissionSchemeRepository.UpdatePermissionScheme(permissionScheme);
+            return _authDbContext.PermissionSchemes.FirstOrDefaultAsync(p => p.Tenant == null);
         }
 
-        public PermissionScheme GetDefaultPermissionScheme()
+        public Task<List<PermissionScheme>> GetPermissionSchemesForTenant(string clientId)
         {
-            return _permissionSchemeRepository.GetPermissionSchemeByTenant(null).First();
+            return _authDbContext.PermissionSchemes.Where(p => p.Tenant.Equals(clientId)).ToListAsync();
         }
     }
 }

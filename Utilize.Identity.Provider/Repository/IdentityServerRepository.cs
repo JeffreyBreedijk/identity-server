@@ -10,7 +10,7 @@ using Utilize.Identity.Provider.Options;
 
 namespace Utilize.Identity.Provider.Repository
 {
-    public interface IRepository
+    public interface IIdentityServerRepository
     {
         IQueryable<T> All<T>() where T : class, new();
         IQueryable<T> Where<T>(Expression<Func<T, bool>> expression) where T : class, new();
@@ -25,13 +25,12 @@ namespace Utilize.Identity.Provider.Repository
         void UpdateClient(Client item);
     }
     
-        public class MongoRepository : IRepository
+        public class MongoIdentityServerRepository : IIdentityServerRepository
     {
-        protected static IMongoClient _client;
-        protected static IMongoDatabase _database;
+        private static IMongoClient _client;
+        private static IMongoDatabase _database;
 
-
-        public MongoRepository(IOptions<ConfigurationOptions> optionsAccessor)
+        public MongoIdentityServerRepository(IOptions<ConfigurationOptions> optionsAccessor)
         {
             var configurationOptions = optionsAccessor.Value;
 

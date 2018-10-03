@@ -8,30 +8,30 @@ using Utilize.Identity.Provider.Repository;
 
 namespace Utilize.Identity.Provider.Services
 {
-    public class CustomResourceStore : IResourceStore
+    public class ResourceService : IResourceStore
     {
-        private readonly IRepository _repository;
+        private readonly IIdentityServerRepository _identityServerRepository;
 
-        public CustomResourceStore(IRepository repository)
+        public ResourceService(IIdentityServerRepository identityServerRepository)
         {
-            _repository = repository;
+            _identityServerRepository = identityServerRepository;
         }
 
         private IEnumerable<ApiResource> GetAllApiResources()
         {
-            return _repository.All<ApiResource>();
+            return _identityServerRepository.All<ApiResource>();
         }
 
         private IEnumerable<IdentityResource> GetAllIdentityResources()
         {
-            return _repository.All<IdentityResource>();
+            return _identityServerRepository.All<IdentityResource>();
         }
 
         public Task<ApiResource> FindApiResourceAsync(string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
 
-            return Task.FromResult(_repository.Single<ApiResource>(a => a.Name == name));
+            return Task.FromResult(_identityServerRepository.Single<ApiResource>(a => a.Name == name));
         }
 
         public Task<Resources> GetAllResourcesAsync()
@@ -42,14 +42,14 @@ namespace Utilize.Identity.Provider.Services
 
         public Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            var list = _repository.Where<ApiResource>(a => a.Scopes.Any(s => scopeNames.Contains(s.Name)));
+            var list = _identityServerRepository.Where<ApiResource>(a => a.Scopes.Any(s => scopeNames.Contains(s.Name)));
 
             return Task.FromResult(list.AsEnumerable());
         }
 
         public Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            var list = _repository.Where<IdentityResource>(e => scopeNames.Contains(e.Name));
+            var list = _identityServerRepository.Where<IdentityResource>(e => scopeNames.Contains(e.Name));
 
             return Task.FromResult(list.AsEnumerable());
         }

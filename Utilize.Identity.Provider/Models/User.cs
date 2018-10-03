@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Utilize.Identity.Provider.Models
 {
+    [Table(name:"users")]
     public class User
     {
         [Key]
         public string Id { get; set; }
         
-        public Tenant Tenant { get; set; }
+        public string Tenant { get; set; }
         
         public string LoginCode { get; set;}
         
@@ -27,6 +29,8 @@ namespace Utilize.Identity.Provider.Models
         
         public string DebtorId { get; set;}
         
+        
+       
       
     }
 }

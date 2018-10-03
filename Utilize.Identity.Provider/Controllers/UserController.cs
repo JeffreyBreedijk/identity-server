@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Mvc;
+using Utilize.Identity.Provider.DataSources;
+using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Services;
 
 namespace Utilize.Identity.Provider.Controllers
@@ -7,25 +11,28 @@ namespace Utilize.Identity.Provider.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ITenantService _tenantService;
+        private readonly IClientStore _clientStore;
+        private readonly AuthDbContext _authDbContext;
 
-        public UserController(IUserService userService, ITenantService tenantService)
+        public UserController(IUserService userService, IClientStore clientStore, AuthDbContext authDbContext)
         {
             _userService = userService;
-            _tenantService = tenantService;
-            
+            _clientStore = clientStore;
+            _authDbContext = authDbContext;
         }
 
         [HttpPost]
-        public ActionResult CreateUser([FromForm] string tenantId, [FromForm] string username, [FromForm] string password)
+        public ActionResult CreateUser([FromForm] string clientId, [FromForm] string username, [FromForm] string password)
         {
-            var tenant = _tenantService.GetTenant(tenantId);
-            if (tenant == null)
-                return NotFound();
+
+            if (_clientStore.FindClientByIdAsync(clientId).Result == null)
+                return NotFound("Client not found");
+            if (_userService.GetUser(clientId, username).Result != null)
+                return UnprocessableEntity();
             // todo: password strengt check otherwiser return UnprocessableEntity() --HTTP 422
             
-           _userService.CreateUser(tenant, username, password);
-            return NoContent();
+           _userService.CreateUser(clientId, username, password);
+           return NoContent();
         }
 
     }
