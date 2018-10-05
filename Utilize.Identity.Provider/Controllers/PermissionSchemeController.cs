@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IdentityModel;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IPermissionSchemeService = Utilize.Identity.Provider.Services.IPermissionSchemeService;
 using PermissionSchemeDto = Utilize.Identity.Provider.DTO.PermissionSchemeDto;
@@ -8,6 +10,7 @@ using PermissionSchemeDto = Utilize.Identity.Provider.DTO.PermissionSchemeDto;
 namespace Utilize.Identity.Provider.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class PermissionSchemeController : Controller
     {
         private readonly IPermissionSchemeService _permissionSchemeService;
@@ -23,9 +26,7 @@ namespace Utilize.Identity.Provider.Controllers
         [HttpGet]
         public ActionResult<List<PermissionSchemeDto>> GetPermissionSchemes()
         {
-//            var x = User.Claims.Select(c => c.Value).ToList();;
-            var clientId = "";
-            // todo check user claim for tenant id
+            var clientId = User.Claims.Where(c => c.Type.Equals(JwtClaimTypes.ClientId)).Select(c => c.Value).First();
             var client = _clientStore.FindClientByIdAsync(clientId).Result;
             if (client == null)
                 return NotFound();
@@ -36,8 +37,7 @@ namespace Utilize.Identity.Provider.Controllers
         [HttpPut]
         public ActionResult PutPermissionScheme([FromBody] PermissionSchemeDto permissionSchemeDto)
         {
-            var clientId = "";
-            // todo check user claim for tenant id
+            var clientId = User.Claims.Where(c => c.Type.Equals(JwtClaimTypes.ClientId)).Select(c => c.Value).First();
             var client = _clientStore.FindClientByIdAsync(clientId).Result;
             if (client == null)
                 return NotFound();

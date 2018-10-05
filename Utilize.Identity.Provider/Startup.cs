@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using IdentityModel;
+using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using Npgsql;
+using Utilize.Identity.Manager.Authorization;
 using Utilize.Identity.Provider.IdentityServer;
 using Utilize.Identity.Provider.Options;
 using Utilize.Identity.Provider.Repository;
@@ -86,7 +91,28 @@ namespace Utilize.Identity.Provider
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
             
 
+            // IdentityServer Client
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    // base-address of your identityserver
+                    options.Authority = "http://127.0.0.1:5000";
+
+                    // name of the API resource
+                    options.ApiName = "Default Resource";
+                    
+                    IdentityModelEventSource.ShowPII = true;
+                });
             
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("HasPermission", policy => policy.Requirements.Add(new PermissionRequirement("testpermission")));
+                options.AddPolicy("IsUtilizeAdmin", policy => policy.Requirements.Add(new PermissionRequirement("utilize-admin")));
+            });
+            
+         
+            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
             
             
             
@@ -106,6 +132,7 @@ namespace Utilize.Identity.Provider
             app.UseAuthentication();
             app.UseMvc();
             app.UseIdentityServer();
+            
             
             ConfigureMongoDriver2IgnoreExtraElements();
             Seed(identityServerRepository);

@@ -66,7 +66,7 @@ namespace Utilize.Identity.Provider.IdentityServer
                 new Claim(JwtClaimTypes.FamilyName, user.Lastname ?? ""),
                 new Claim(JwtClaimTypes.Email, user.Email ?? ""),
                 new Claim("debtor_id", user.DebtorId ?? ""),
-                new Claim("permissions", JsonConvert.SerializeObject(new List<string>() {"testpermission"})),
+                new Claim("permissions", JsonConvert.SerializeObject(new List<string>() {"utilize-admin"})),
                 new Claim("licences", JsonConvert.SerializeObject(new List<string>() {"testlicence"}))
 
                 

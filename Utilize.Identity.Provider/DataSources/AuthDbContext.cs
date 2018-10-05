@@ -27,7 +27,7 @@ namespace Utilize.Identity.Provider.DataSources
 
             builder.Entity<PermissionScheme>().HasData(new PermissionScheme()
             {
-                Id = Guid.NewGuid(),
+                Id = Helpers.Hasher.GetHash("Default Permission Scheme"),
                 Name = "Default Permission Scheme",
                 Tenant = null
             });

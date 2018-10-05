@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Utilize.Identity.Provider.DataSources;
 using Utilize.Identity.Provider.DTO;
+using Utilize.Identity.Provider.Helpers;
 using Utilize.Identity.Provider.Models;
 using Utilize.Identity.Provider.Repository;
 
@@ -30,7 +31,7 @@ namespace Utilize.Identity.Provider.Services
         {
             await _authDbContext.PermissionSchemes.AddAsync(new PermissionScheme()
             {
-                Id = Guid.NewGuid(),
+                Id = Hasher.GetHash(permissionSchemeDto.Name + clientId),
                 IsActive = permissionSchemeDto.IsActive,
                 Name = permissionSchemeDto.Name,
                 Tenant = clientId
