@@ -3,22 +3,22 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Services;
-using TenantDto = Utilize.Identity.Provider.DTO.TenantDto;
 
 namespace Utilize.Identity.Provider.Controllers
 {
     [Route("[controller]")]
-    public class ClientController : Controller
+    public class ClientsController : Controller
     {
         private readonly IClientStore _clientStore;
         private readonly IClientWriteStore _writeStore;
+        private readonly IPermissionSchemeService _permissionSchemeService;
 
-        public ClientController(IClientStore clientStore, IClientWriteStore writeStore)
+        public ClientsController(IClientStore clientStore, IClientWriteStore writeStore, IPermissionSchemeService permissionSchemeService)
         {
             _clientStore = clientStore;
             _writeStore = writeStore;
+            _permissionSchemeService = permissionSchemeService;
         }
-
 
         [HttpGet]
         [Route("{clientId}")]

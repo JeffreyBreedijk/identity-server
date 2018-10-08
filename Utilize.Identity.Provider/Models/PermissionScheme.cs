@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Utilize.Identity.Provider.DTO;
+using Utilize.Identity.Provider.Helpers;
 
 namespace Utilize.Identity.Provider.Models
 {
@@ -9,23 +10,21 @@ namespace Utilize.Identity.Provider.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Tenant { get; set; }
+        public string Client { get; set; }
         public bool IsActive { get; set; }
+        public HashSet<Role> Roles { get; set; }
 
-        public PermissionSchemeDto ToDto()
+        public PermissionScheme()
         {
-            return new PermissionSchemeDto()
-            {
-                Id = Id,
-                IsActive = IsActive,
-                Name = Name
-            };
+            
         }
         
-        public void ApplyDto(PermissionSchemeDto dto)
+        public PermissionScheme(string clientId, string name)
         {
-            Name = dto.Name;
-            IsActive = dto.IsActive;
+            Id = Hasher.GetHash(name + clientId);
+            Name = name;
+            Client = clientId;
+            IsActive = false;
         }
     }
     

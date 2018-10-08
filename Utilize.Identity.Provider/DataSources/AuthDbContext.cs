@@ -11,8 +11,12 @@ namespace Utilize.Identity.Provider.DataSources
         public DbSet<User> Users { get; set; }
 
         public DbSet<Licence> Licences { get; set; }
+        
+        public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<PermissionScheme> PermissionSchemes { get; set; }
+        
+        public DbSet<Role> Roles { get; set; }
 
         public AuthDbContext(DbContextOptions options) : base(options)
         {
@@ -24,13 +28,6 @@ namespace Utilize.Identity.Provider.DataSources
 
             base.OnModelCreating(builder);
 
-
-            builder.Entity<PermissionScheme>().HasData(new PermissionScheme()
-            {
-                Id = Helpers.Hasher.GetHash("Default Permission Scheme"),
-                Name = "Default Permission Scheme",
-                Tenant = null
-            });
         }
 
         private static void NamesToSnakeCase(ModelBuilder modelBuilder)

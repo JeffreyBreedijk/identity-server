@@ -8,13 +8,13 @@ using Utilize.Identity.Provider.Services;
 namespace Utilize.Identity.Provider.Controllers
 {
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IClientStore _clientStore;
         private readonly AuthDbContext _authDbContext;
 
-        public UserController(IUserService userService, IClientStore clientStore, AuthDbContext authDbContext)
+        public UsersController(IUserService userService, IClientStore clientStore, AuthDbContext authDbContext)
         {
             _userService = userService;
             _clientStore = clientStore;

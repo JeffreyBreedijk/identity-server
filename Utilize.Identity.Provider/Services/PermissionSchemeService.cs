@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Utilize.Identity.Provider.DataSources;
-using Utilize.Identity.Provider.DTO;
 using Utilize.Identity.Provider.Helpers;
 using Utilize.Identity.Provider.Models;
 using Utilize.Identity.Provider.Repository;
@@ -13,9 +12,9 @@ namespace Utilize.Identity.Provider.Services
 {
     public interface IPermissionSchemeService
     {
-        Task CreatePermissionScheme(string clientId, PermissionSchemeDto permissionSchemeDto);
-        Task<PermissionScheme> GetDefaultPermissionScheme();
-        Task<List<PermissionScheme>> GetPermissionSchemesForTenant(string clientId);
+        Task CreatePermissionScheme(PermissionScheme permissionScheme);
+        Task<List<PermissionScheme>> GetPermissionSchemes(string clientId);
+        Task SavePermissionScheme(PermissionScheme permissionScheme);
     }
 
     public class PermissionSchemeService : IPermissionSchemeService
@@ -27,26 +26,23 @@ namespace Utilize.Identity.Provider.Services
             _authDbContext = authDbContext;
         }
 
-        public async Task CreatePermissionScheme(string clientId, PermissionSchemeDto permissionSchemeDto)
+        public async Task CreatePermissionScheme(PermissionScheme permissionScheme)
         {
-            await _authDbContext.PermissionSchemes.AddAsync(new PermissionScheme()
-            {
-                Id = Hasher.GetHash(permissionSchemeDto.Name + clientId),
-                IsActive = permissionSchemeDto.IsActive,
-                Name = permissionSchemeDto.Name,
-                Tenant = clientId
-            });
+            await _authDbContext.PermissionSchemes.AddAsync(permissionScheme);
             await _authDbContext.SaveChangesAsync();
         }
 
-        public Task<PermissionScheme> GetDefaultPermissionScheme()
+        public async Task<List<PermissionScheme>> GetPermissionSchemes(string clientId)
         {
-            return _authDbContext.PermissionSchemes.FirstOrDefaultAsync(p => p.Tenant == null);
+            return await _authDbContext.PermissionSchemes.Where(p => p.Client.Equals(clientId)).Include(p => p.Roles).ToListAsync();
         }
 
-        public Task<List<PermissionScheme>> GetPermissionSchemesForTenant(string clientId)
+        public async Task SavePermissionScheme(PermissionScheme permissionScheme)
         {
-            return _authDbContext.PermissionSchemes.Where(p => p.Tenant.Equals(clientId)).ToListAsync();
+            _authDbContext.Update(permissionScheme);
+            await _authDbContext.SaveChangesAsync();
         }
+
+
     }
 }

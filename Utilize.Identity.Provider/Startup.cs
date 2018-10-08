@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Models;
@@ -71,6 +70,9 @@ namespace Utilize.Identity.Provider
             // Services
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IPermissionSchemeService, PermissionSchemeService>();
+            services.AddTransient<ILicenceService, LicenceService>();
+            services.AddTransient<IPermissionService, PermissionService>();
+//            services.AddTransient<IRoleService, RoleService>();
             
 
             services.Configure<ConfigurationOptions>(Configuration);
@@ -137,7 +139,7 @@ namespace Utilize.Identity.Provider
             ConfigureMongoDriver2IgnoreExtraElements();
             Seed(identityServerRepository);
             
-           
+
 
         }
 
@@ -173,7 +175,6 @@ namespace Utilize.Identity.Provider
             }
         }
 
-        
         private static void ConfigureMongoDriver2IgnoreExtraElements()
         {
           
