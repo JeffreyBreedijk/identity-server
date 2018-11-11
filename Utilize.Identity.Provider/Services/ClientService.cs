@@ -7,7 +7,7 @@ namespace Utilize.Identity.Provider.Services
     public interface IClientWriteStore
     {
         void UpdateClient(Client client);
-        void Add(Client client);
+        Task Add(Client client);
     }
     
     public class ClientService : IdentityServer4.Stores.IClientStore, IClientWriteStore
@@ -31,9 +31,9 @@ namespace Utilize.Identity.Provider.Services
             _identityServerRepository.UpdateClient(client);
         }
 
-        public void Add(Client client)
+        public async Task Add(Client client)
         {
-            _identityServerRepository.Add(client);
+           await _identityServerRepository.Add(client);
         }
     }
 }

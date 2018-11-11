@@ -22,9 +22,7 @@ using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Services;
 using AuthDbContext = Utilize.Identity.Provider.DataSources.AuthDbContext;
 using IPasswordService = Utilize.Identity.Provider.Services.IPasswordService;
-using IPermissionSchemeService = Utilize.Identity.Provider.Services.IPermissionSchemeService;
 using IUserService = Utilize.Identity.Provider.Services.IUserService;
-using PermissionSchemeService = Utilize.Identity.Provider.Services.PermissionSchemeService;
 using PkcsSha256PasswordService = Utilize.Identity.Provider.Services.PkcsSha256PasswordService;
 using UserService = Utilize.Identity.Provider.Services.UserService;
 
@@ -69,9 +67,6 @@ namespace Utilize.Identity.Provider
             
             // Services
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IPermissionSchemeService, PermissionSchemeService>();
-            services.AddTransient<ILicenceService, LicenceService>();
-            services.AddTransient<IPermissionService, PermissionService>();
 //            services.AddTransient<IRoleService, RoleService>();
             
 
@@ -89,7 +84,8 @@ namespace Utilize.Identity.Provider
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddClientStore<ClientService>()
-                .AddResourceStore<ResourceService>()
+                //.AddResourceStore<ResourceService>()
+                .AddInMemoryApiResources(Config.GetApis())
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
             
 
@@ -103,6 +99,7 @@ namespace Utilize.Identity.Provider
 
                     // name of the API resource
                     options.ApiName = "Default Resource";
+                    
                     
                     IdentityModelEventSource.ShowPII = true;
                 });

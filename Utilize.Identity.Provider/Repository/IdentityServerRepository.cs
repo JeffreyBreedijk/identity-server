@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -16,7 +17,7 @@ namespace Utilize.Identity.Provider.Repository
         IQueryable<T> Where<T>(Expression<Func<T, bool>> expression) where T : class, new();
         T Single<T>(Expression<Func<T, bool>> expression) where T : class, new();
         void Delete<T>(Expression<Func<T, bool>> expression) where T : class, new();
-        void Add<T>(T item) where T : class, new();
+        Task Add<T>(T item) where T : class, new();
         void Add<T>(IEnumerable<T> items) where T : class, new();
         bool CollectionExists<T>() where T : class, new();
         
@@ -74,9 +75,9 @@ namespace Utilize.Identity.Provider.Repository
 
         }
 
-        public void Add<T>(T item) where T : class, new()
+        public async Task Add<T>(T item) where T : class, new()
         {
-            _database.GetCollection<T>(typeof(T).Name).InsertOne(item);
+            await _database.GetCollection<T>(typeof(T).Name).InsertOneAsync(item);
         }
         
         

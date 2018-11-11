@@ -9,7 +9,7 @@ using Utilize.Identity.Provider.Repository;
 
 namespace Utilize.Identity.Provider.Services
 {
-    public interface IUserService
+    public interface IUserService 
     {
         Task<User> GetUser(string tenantId, string loginCode);
         Task CreateUser(string clientId, string loginCode, string password);

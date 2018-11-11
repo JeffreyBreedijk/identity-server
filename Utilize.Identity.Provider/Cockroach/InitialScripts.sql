@@ -8,3 +8,11 @@ CREATE TABLE IF NOT EXISTS identity.licences (id UUID PRIMARY KEY, name string U
 CREATE TABLE IF NOT EXISTS identity.permissions (id UUID PRIMARY KEY, name string UNIQUE, licence_id UUID);
 
 CREATE TABLE IF NOT EXISTS identity.roles (id UUID PRIMARY KEY, name string, permission_scheme_id string);
+
+CREATE TABLE IF NOT EXISTS identity.permissionroles
+(
+  permission_id
+  UUID,
+  role_id
+  UUID
+);

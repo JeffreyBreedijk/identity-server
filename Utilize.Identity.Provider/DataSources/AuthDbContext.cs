@@ -10,14 +10,6 @@ namespace Utilize.Identity.Provider.DataSources
     {
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Licence> Licences { get; set; }
-        
-        public DbSet<Permission> Permissions { get; set; }
-
-        public DbSet<PermissionScheme> PermissionSchemes { get; set; }
-        
-        public DbSet<Role> Roles { get; set; }
-
         public AuthDbContext(DbContextOptions options) : base(options)
         {
         }
