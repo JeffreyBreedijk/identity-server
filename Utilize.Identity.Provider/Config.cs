@@ -6,41 +6,33 @@ namespace Utilize.Identity.Provider
 {
     public class Config
     {
-        public static IEnumerable<ApiResource> GetApis()
+        // scopes define the API resources in your system
+        public static IEnumerable<ApiResource> GetApiResources()
         {
-            return new[]
+            var r = new ApiResource("api1", "My API") {ApiSecrets = new List<Secret>() {new Secret("secret".Sha256())}};
+            return new List<ApiResource>
             {
-                // simple API with a single scope (in this case the scope name is the same as the api name)
-                new ApiResource("api1", "Some API 1"),
+                r
+            };
+        }
 
-                // expanded version if more control is needed
-                new ApiResource
+        // clients want to access resources (aka scopes)
+        public static IEnumerable<Client> GetClients()
+        {
+            // client credentials client
+            return new List<Client>
+            {
+                new Client
                 {
-                    Name = "api2",
-
-                    // secret for using introspection endpoint
-                    ApiSecrets =
+                    ClientId = "client",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AccessTokenType = AccessTokenType.Reference,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    ClientSecrets = 
                     {
                         new Secret("secret".Sha256())
                     },
-
-                    // include the following using claims in access token (in addition to subject id)
-                    UserClaims = { JwtClaimTypes.Name, JwtClaimTypes.Email },
-
-                    // this API defines two scopes
-                    Scopes =
-                    {
-                        new Scope()
-                        {
-                            Name = "api2.full_access",
-                            DisplayName = "Full access to API 2",
-                        },
-                        new Scope
-                        {
-                            Name = "api2.read_only",
-                            DisplayName = "Read only access to API 2"
-                        }
-                    }
+                    AllowedScopes = { "api1" }
                 }
             };
         }

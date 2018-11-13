@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Models;
@@ -6,7 +7,7 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,33 +15,19 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
-using Npgsql;
-using Utilize.Identity.Manager.Authorization;
-using Utilize.Identity.Provider.IdentityServer;
 using Utilize.Identity.Provider.Options;
 using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Services;
-using AuthDbContext = Utilize.Identity.Provider.DataSources.AuthDbContext;
-using IPasswordService = Utilize.Identity.Provider.Services.IPasswordService;
-using IUserService = Utilize.Identity.Provider.Services.IUserService;
-using PkcsSha256PasswordService = Utilize.Identity.Provider.Services.PkcsSha256PasswordService;
-using UserService = Utilize.Identity.Provider.Services.UserService;
 
 namespace Utilize.Identity.Provider
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = Generic.Configuration.BuildConfiguration();
         }
 
 
@@ -48,32 +35,12 @@ namespace Utilize.Identity.Provider
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnectionString =
-                new NpgsqlConnectionStringBuilder
-                {
-                    Host = "localhost",
-                    Port = 26257,
-                    Username = "utilize",
-                    Database = "identity"
-                }.ConnectionString;
-
-            // Configure DB connection
-            services.AddDbContext<AuthDbContext>(options =>
-                options.UseNpgsql(@dbConnectionString));
-            
-
-            // Configure other services
-            services.AddTransient<IPasswordService, PkcsSha256PasswordService>();
-            
-            // Services
-            services.AddTransient<IUserService, UserService>();
-//            services.AddTransient<IRoleService, RoleService>();
-            
-
+           
             services.Configure<ConfigurationOptions>(Configuration);
             services.AddTransient<IClientStore, ClientService>();
             services.AddTransient<IClientWriteStore, ClientService>();
             services.AddTransient<IResourceStore, ResourceService>();
+            services.AddTransient<IReferenceTokenStore, ReferenceTokenStore>();
             services.AddTransient<IIdentityServerRepository, MongoIdentityServerRepository>();
 
             services.AddMvcCore()
@@ -82,50 +49,37 @@ namespace Utilize.Identity.Provider
 
             // Configure IdentityServer
             services.AddIdentityServer()
+//                .AddResourceStore<ResourceService>()
+              //  .AddClientStore<ClientService>()
                 .AddDeveloperSigningCredential()
-                .AddClientStore<ClientService>()
-                //.AddResourceStore<ResourceService>()
-                .AddInMemoryApiResources(Config.GetApis())
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
+                .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryApiResources(Config.GetApiResources());
+
             
 
-            // IdentityServer Client
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
+                    options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
-                    // base-address of your identityserver
-                    options.Authority = "http://127.0.0.1:5000";
-
-                    // name of the API resource
-                    options.ApiName = "Default Resource";
-                    
-                    
-                    IdentityModelEventSource.ShowPII = true;
+ 
+                    options.ApiName = "api1";
+                    options.ApiSecret = "secret";
                 });
+          
             
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("HasPermission", policy => policy.Requirements.Add(new PermissionRequirement("testpermission")));
-                options.AddPolicy("IsUtilizeAdmin", policy => policy.Requirements.Add(new PermissionRequirement("utilize-admin")));
-            });
-            
-         
-            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-            
-            
-            
-            // services.AddMvc();
+            services.AddMvc();
             services.AddLogging();
-            //services.Configure<MvcOptions>(options => { options.Filters.Add(new RequireHttpsAttribute()); });
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = "localhost";
+                option.InstanceName = "master";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
-            IIdentityServerRepository identityServerRepository, IOptions<ConfigurationOptions> optionsAccessor)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseAuthentication();
@@ -134,42 +88,6 @@ namespace Utilize.Identity.Provider
             
             
             ConfigureMongoDriver2IgnoreExtraElements();
-            Seed(identityServerRepository);
-            
-
-
-        }
-
-        private static void Seed(IIdentityServerRepository identityServerRepository)
-        {
-            
-            if (!identityServerRepository.CollectionExists<ApiResource>())
-            {
-                var defaultResource = new ApiResource
-            {
-                Name = "Default Resource",
-                Scopes = new List<Scope>()
-                {
-                    new Scope()
-                    {
-                        Name = "default",
-                        DisplayName = "default",
-                        UserClaims =
-                        {
-                            JwtClaimTypes.Name,
-                            JwtClaimTypes.Email,
-                            JwtClaimTypes.FamilyName,
-                            JwtClaimTypes.GivenName,
-                            "debtor_id",
-                            "permissions"
-                        }
-                    }
-                }
-            };
-
-                    identityServerRepository.Add<ApiResource>(defaultResource);
-
-            }
         }
 
         private static void ConfigureMongoDriver2IgnoreExtraElements()

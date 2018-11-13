@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Services;
@@ -19,7 +22,14 @@ namespace Utilize.Identity.Provider.Controllers
         {
             _clientStore = clientStore;
             _writeStore = writeStore;
-        }  
+        }
+
+        [HttpGet]
+        [Authorize]
+        public string test()
+        {
+            return User.Claims.FirstOrDefault(c => c.Type.Equals(JwtClaimTypes.ClientId))?.Value;
+        }
         
         [HttpPost]
         [Route("{clientId}")]

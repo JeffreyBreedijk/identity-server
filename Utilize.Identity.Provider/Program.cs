@@ -14,11 +14,6 @@ namespace Utilize.Identity.Provider
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-//                .UseKestrel(options =>
-//                {
-//                    options.Listen(IPAddress.Loopback, 5000,
-//                        listenOptions => { listenOptions.UseHttps("Certs/ks.pfx", "utilize"); });
-//                })
                 .Build();
     }
 }

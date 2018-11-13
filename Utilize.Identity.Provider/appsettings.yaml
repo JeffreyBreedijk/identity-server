@@ -1,0 +1,2 @@
+MongoConnection: mongodb://localhost:27017
+MongoDatabaseName: identity4db
