@@ -37,11 +37,10 @@ namespace Utilize.Identity.Provider
         {
            
             services.Configure<ConfigurationOptions>(Configuration);
-            services.AddTransient<IClientStore, ClientService>();
-            services.AddTransient<IClientWriteStore, ClientService>();
-            services.AddTransient<IResourceStore, ResourceService>();
+            services.AddTransient<IClientStore, ClientRepository>();
+            services.AddTransient<IClientWriteStore, ClientRepository>();
+            services.AddTransient<IResourceStore, ResourceRepository>();
             services.AddTransient<IReferenceTokenStore, ReferenceTokenStore>();
-            services.AddTransient<IIdentityServerRepository, MongoIdentityServerRepository>();
 
             services.AddMvcCore()
                 .AddAuthorization()

@@ -60,19 +60,19 @@ namespace Utilize.Identity.Provider.Controllers
                 return NotFound("Client not found");
             var secret = new Secret(Guid.NewGuid().ToString("N").Sha256());
             client.ClientSecrets.Add(secret);            
-            _writeStore.UpdateClient(client);
+            await _writeStore.UpdateClient(client);
             return Ok(secret.Value);
         }
         
         [HttpPost]
         [Route("{clientId}/scopes/{scopeId}")]
-        public ActionResult AddScope([FromRoute] string clientId, [FromRoute] string scopeId)
+        public async Task<ActionResult> AddScope([FromRoute] string clientId, [FromRoute] string scopeId)
         {
             var client = _clientStore.FindClientByIdAsync(clientId).Result;
             if (client == null)
                 return NotFound();
             client.AllowedScopes.Add(scopeId);
-            _writeStore.UpdateClient(client);    
+            await _writeStore.UpdateClient(client);    
            
             return NoContent();
         } 
