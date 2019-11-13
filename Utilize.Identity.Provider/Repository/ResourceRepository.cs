@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Utilize.Identity.Provider.Options;
@@ -16,7 +15,7 @@ namespace Utilize.Identity.Provider.Repository
         Task UpdateApiResource(ApiResource resource);
         Task AddApiResource(ApiResource resource);
     }
-    
+
     public class ResourceRepository : IResourceStore, IResourceWriteStore
     {
         private static IMongoDatabase _database;
@@ -29,21 +28,17 @@ namespace Utilize.Identity.Provider.Repository
             _database = client.GetDatabase(configurationOptions.MongoDatabaseName);
         }
 
-        private IEnumerable<ApiResource> GetAllApiResources()
-        {
-            return _database.GetCollection<ApiResource>(typeof(ApiResource).Name).AsQueryable();
-        }
-
-        public async Task<ApiResource> FindApiResourceAsync(string name)
+        public Task<ApiResource> FindApiResourceAsync(string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
 
-            return await _database.GetCollection<ApiResource>(typeof(ApiResource).Name)
-                .AsQueryable().Where(a => a.Name.Equals(name))
-                .SingleOrDefaultAsync();       
+            return Task.FromResult(_database
+                .GetCollection<ApiResource>(typeof(ApiResource).Name)
+                .AsQueryable()
+                .SingleOrDefault(a => a.Name.Equals(name)));
         }
 
-        public  Task<Resources> GetAllResourcesAsync()
+        public Task<Resources> GetAllResourcesAsync()
         {
             var result = new Resources(new List<IdentityResource>(), GetAllApiResources());
             return Task.FromResult(result);
@@ -54,12 +49,13 @@ namespace Utilize.Identity.Provider.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
+        public Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            return await _database.GetCollection<ApiResource>(typeof(ApiResource).Name)
+            return Task.FromResult((IEnumerable<ApiResource>) _database
+                .GetCollection<ApiResource>(typeof(ApiResource).Name)
                 .AsQueryable()
                 .Where(a => a.Scopes.Any(s => scopeNames.Contains(s.Name)))
-                .ToListAsync();
+                .ToList());
         }
 
 
@@ -72,6 +68,11 @@ namespace Utilize.Identity.Provider.Repository
         public async Task AddApiResource(ApiResource resource)
         {
             await _database.GetCollection<ApiResource>(typeof(ApiResource).Name).InsertOneAsync(resource);
+        }
+
+        private IEnumerable<ApiResource> GetAllApiResources()
+        {
+            return _database.GetCollection<ApiResource>(typeof(ApiResource).Name).AsQueryable();
         }
     }
 }

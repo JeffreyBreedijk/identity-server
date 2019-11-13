@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using IdentityModel;
-using IdentityServer4.AccessTokenValidation;
+﻿using System.IO;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using Utilize.Identity.Provider.Options;
@@ -23,50 +15,34 @@ namespace Utilize.Identity.Provider
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            Configuration = Generic.Configuration.BuildConfiguration();
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddYamlFile("appsettings.yaml")
+                .AddEnvironmentVariables()
+                .Build();
         }
 
+        public IConfiguration Configuration { get; }
 
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
             services.Configure<ConfigurationOptions>(Configuration);
             services.AddTransient<IClientStore, ClientRepository>();
             services.AddTransient<IClientWriteStore, ClientRepository>();
             services.AddTransient<IResourceStore, ResourceRepository>();
             services.AddTransient<IReferenceTokenStore, ReferenceTokenStore>();
 
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters();
 
-            // Configure IdentityServer
+            services.AddAuthorization();
+
             services.AddIdentityServer()
-//                .AddResourceStore<ResourceService>()
-              //  .AddClientStore<ClientService>()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryApiResources(Config.GetApiResources());
+                .AddResourceStore<ResourceRepository>()
+                .AddClientStore<ClientRepository>()
+                .AddDeveloperSigningCredential();
 
-            
 
-            services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "http://localhost:5000";
-                    options.RequireHttpsMetadata = false;
- 
-                    options.ApiName = "api1";
-                    options.ApiSecret = "secret";
-                });
-          
-            
             services.AddMvc();
             services.AddLogging();
             services.AddDistributedRedisCache(option =>
@@ -76,25 +52,19 @@ namespace Utilize.Identity.Provider
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            loggerFactory.AddDebug();
-
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseHttpsRedirection();
             app.UseIdentityServer();
-            
-            
+
             ConfigureMongoDriver2IgnoreExtraElements();
         }
 
         private static void ConfigureMongoDriver2IgnoreExtraElements()
         {
-          
             BsonClassMap.RegisterClassMap<Client>(cm =>
             {
-               
                 cm.AutoMap();
                 var t = cm.GetMemberMap(x => x.ClientId).SetIdGenerator(StringObjectIdGenerator.Instance);
                 cm.SetIdMember(cm.GetMemberMap(x => x.ClientId).SetIdGenerator(StringObjectIdGenerator.Instance));
@@ -115,11 +85,6 @@ namespace Utilize.Identity.Provider
                 cm.AutoMap();
                 cm.SetIgnoreExtraElements(true);
             });
-
-
-
         }
     }
-
-
 }

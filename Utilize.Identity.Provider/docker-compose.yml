@@ -1,36 +1,19 @@
 version: '3'
 services:
-  #  mongo:
-  #    image: mongo
-  #    ports:
-  #      - 27017:27017
-  #    networks:
-  #      - default
-  #  cockroach:
-  #    image: cockroachdb/cockroach:v2.0.5
-  #    command: start --insecure
-  #    ports:
-  #      - 26257:26257
-  #      - 8080:8080
-  #    networks:
-  #      - default
-  #  cockroach-init:
-  #    image: cockroachdb/cockroach:v2.0.5
-  #    entrypoint: sh /cockroach/init/CockroachInit.sh 
-  #    command: start --insecure
-  #    depends_on:
-  #      - cockroach
-  #    volumes:
-  #      - ./Cockroach:/cockroach/init/
-  #    networks:
-  #      - default
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - utilize
+
   redis:
     image: redis
     ports:
       - 6379:6379
     networks:
-      - default
+      - utilize
+
 networks:
-  default:
-    driver: bridge
+  utilize:
   
