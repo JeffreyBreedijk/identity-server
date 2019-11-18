@@ -8,6 +8,7 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilize.Identity.Provider.Repository;
+using Utilize.Identity.Provider.Repository.Clients;
 using Utilize.Identity.Provider.Services;
 
 namespace Utilize.Identity.Provider.Controllers
@@ -45,7 +46,7 @@ namespace Utilize.Identity.Provider.Controllers
                 AllowAccessTokensViaBrowser = true,
                 AllowOfflineAccess = true,
                 RequireClientSecret = true,
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
             };
             await _writeStore.Add(client);
             return Ok();

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using Utilize.Identity.Provider.Options;
 using Utilize.Identity.Provider.Repository;
+using Utilize.Identity.Provider.Repository.Clients;
 using Utilize.Identity.Provider.Services;
 
 namespace Utilize.Identity.Provider
@@ -29,21 +31,20 @@ namespace Utilize.Identity.Provider
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ConfigurationOptions>(Configuration);
-            services.AddTransient<IClientStore, ClientRepository>();
-            services.AddTransient<IClientWriteStore, ClientRepository>();
+            services.AddTransient<IClientStore, MongoClientRepository>();
+            services.AddTransient<IClientWriteStore, MongoClientRepository>();
             services.AddTransient<IResourceStore, ResourceRepository>();
             services.AddTransient<IReferenceTokenStore, ReferenceTokenStore>();
 
-
+            services.AddControllers();
             services.AddAuthorization();
 
             services.AddIdentityServer()
                 .AddResourceStore<ResourceRepository>()
-                .AddClientStore<ClientRepository>()
+                .AddInMemoryClients(new List<Client>())
+//                .AddClientStore<MongoClientRepository>()
                 .AddDeveloperSigningCredential();
 
-
-            services.AddMvc();
             services.AddLogging();
             services.AddDistributedRedisCache(option =>
             {
@@ -54,6 +55,11 @@ namespace Utilize.Identity.Provider
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseIdentityServer();
@@ -66,7 +72,6 @@ namespace Utilize.Identity.Provider
             BsonClassMap.RegisterClassMap<Client>(cm =>
             {
                 cm.AutoMap();
-                var t = cm.GetMemberMap(x => x.ClientId).SetIdGenerator(StringObjectIdGenerator.Instance);
                 cm.SetIdMember(cm.GetMemberMap(x => x.ClientId).SetIdGenerator(StringObjectIdGenerator.Instance));
                 cm.SetIgnoreExtraElements(true);
             });

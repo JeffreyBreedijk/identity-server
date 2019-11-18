@@ -1,4 +1,0 @@
-/Users/jeffreybreedijk/RiderProjects/Utilize.Identity/Utilize.Identity.Test/obj/Debug/netcoreapp2.1/Utilize.Identity.Test.csprojAssemblyReference.cache
-/Users/jeffreybreedijk/RiderProjects/Utilize.Identity/Utilize.Identity.Test/obj/Debug/netcoreapp2.1/Utilize.Identity.Test.csproj.CoreCompileInputs.cache
-/Users/jeffreybreedijk/RiderProjects/Utilize.Identity/Utilize.Identity.Test/obj/Debug/netcoreapp2.1/Utilize.Identity.Test.AssemblyInfoInputs.cache
-/Users/jeffreybreedijk/RiderProjects/Utilize.Identity/Utilize.Identity.Test/obj/Debug/netcoreapp2.1/Utilize.Identity.Test.AssemblyInfo.cs
