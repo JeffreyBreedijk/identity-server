@@ -8,14 +8,8 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Utilize.Identity.Provider.Options;
 
-namespace Utilize.Identity.Provider.Repository
+namespace Utilize.Identity.Provider.Repository.Mongo
 {
-    public interface IResourceWriteStore
-    {
-        Task UpdateApiResource(ApiResource resource);
-        Task AddApiResource(ApiResource resource);
-    }
-
     public class ResourceRepository : IResourceStore, IResourceWriteStore
     {
         private static IMongoDatabase _database;
@@ -46,7 +40,7 @@ namespace Utilize.Identity.Provider.Repository
 
         public Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            throw new NotImplementedException();
+            return Task.FromResult((IEnumerable<IdentityResource>) new List<IdentityResource>());
         }
 
         public Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)

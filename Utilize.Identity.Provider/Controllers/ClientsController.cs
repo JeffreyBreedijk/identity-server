@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityModel;
+using FluentValidation;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Utilize.Identity.Provider.Repository;
+using Utilize.Identity.Provider.Models;
 using Utilize.Identity.Provider.Repository.Clients;
-using Utilize.Identity.Provider.Services;
 
 namespace Utilize.Identity.Provider.Controllers
 {
@@ -17,66 +15,37 @@ namespace Utilize.Identity.Provider.Controllers
     public class ClientsController : Controller
     {
         private readonly IClientStore _clientStore;
+        private readonly IValidator<SimpleClient> _clientValidator;
         private readonly IClientWriteStore _writeStore;
 
-        public ClientsController(IClientStore clientStore, IClientWriteStore writeStore)
+        public ClientsController(IClientStore clientStore, IClientWriteStore writeStore,
+            IValidator<SimpleClient> clientValidator)
         {
             _clientStore = clientStore;
             _writeStore = writeStore;
+            _clientValidator = clientValidator;
         }
 
-        [HttpGet]
-        [Authorize]
-        public string test()
-        {
-            return User.Claims.FirstOrDefault(c => c.Type.Equals(JwtClaimTypes.ClientId))?.Value;
-        }
-        
         [HttpPost]
         [Route("{clientId}")]
-        public async Task<ActionResult> AddApiClient([FromRoute] string clientId)
+        public async Task<ActionResult> AddApiClient([FromRoute] string clientId, [FromBody] SimpleClient client)
         {
-            var client = new Client()
+            var res = _clientValidator.Validate(client);
+            if (!res.IsValid)
+                return BadRequest(res.Errors.Select(x => x.ErrorMessage).ToList());
+            var defaultSecret = Guid.NewGuid().ToString("N");
+            var isClient = client.ToIdentityServer4Client();
+            isClient.ClientSecrets = new List<Secret>()
             {
-                ClientId = clientId,
-                AccessTokenType = AccessTokenType.Reference,
-                RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                ClientSecrets = new List<Secret>(),
-                UpdateAccessTokenClaimsOnRefresh = true,
-                AllowAccessTokensViaBrowser = true,
-                AllowOfflineAccess = true,
-                RequireClientSecret = true,
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                new Secret()
+                {
+                    Description = "Default Secret",
+                    Value = defaultSecret.Sha256(),
+                    Type = "SharedSecret"
+                }
             };
-            await _writeStore.Add(client);
-            return Ok();
+            await _writeStore.Add(isClient);
+            return Ok(defaultSecret);
         }
-        
-        [HttpPost]
-        [Route("{clientId}/secrets")]
-        public async Task<ActionResult<string>> AddSecret([FromRoute] string clientId)
-        {
-            var client = await _clientStore.FindClientByIdAsync(clientId);
-            if (client == null)
-                return NotFound("Client not found");
-            var secret = new Secret(Guid.NewGuid().ToString("N").Sha256());
-            client.ClientSecrets.Add(secret);            
-            await _writeStore.UpdateClient(client);
-            return Ok(secret.Value);
-        }
-        
-        [HttpPost]
-        [Route("{clientId}/scopes/{scopeId}")]
-        public async Task<ActionResult> AddScope([FromRoute] string clientId, [FromRoute] string scopeId)
-        {
-            var client = _clientStore.FindClientByIdAsync(clientId).Result;
-            if (client == null)
-                return NotFound();
-            client.AllowedScopes.Add(scopeId);
-            await _writeStore.UpdateClient(client);    
-           
-            return NoContent();
-        } 
-        
     }
 }

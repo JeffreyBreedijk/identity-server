@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using FluentValidation.AspNetCore;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +11,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 using Utilize.Identity.Provider.Options;
 using Utilize.Identity.Provider.Repository;
 using Utilize.Identity.Provider.Repository.Clients;
+using Utilize.Identity.Provider.Repository.Mongo;
 using Utilize.Identity.Provider.Services;
 
 namespace Utilize.Identity.Provider
@@ -34,15 +35,16 @@ namespace Utilize.Identity.Provider
             services.AddTransient<IClientStore, MongoClientRepository>();
             services.AddTransient<IClientWriteStore, MongoClientRepository>();
             services.AddTransient<IResourceStore, ResourceRepository>();
+            services.AddTransient<IResourceWriteStore, ResourceRepository>();
             services.AddTransient<IReferenceTokenStore, ReferenceTokenStore>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddAuthorization();
 
             services.AddIdentityServer()
                 .AddResourceStore<ResourceRepository>()
-                .AddInMemoryClients(new List<Client>())
-//                .AddClientStore<MongoClientRepository>()
+                .AddClientStore<MongoClientRepository>()
                 .AddDeveloperSigningCredential();
 
             services.AddLogging();
@@ -56,10 +58,7 @@ namespace Utilize.Identity.Provider
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseIdentityServer();

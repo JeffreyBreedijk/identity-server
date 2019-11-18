@@ -20,8 +20,8 @@ namespace Utilize.Identity.Provider.Repository.Clients
 
         public async Task<Client> FindClientByIdAsync(string clientId)
         {
-            var filter = Builders<Client>.Filter.Eq("id", clientId);
-            return await _database.GetCollection<Client>(typeof(Client).Name).Find(database => database.ClientId == clientId).FirstOrDefaultAsync();
+            return await _database.GetCollection<Client>(typeof(Client).Name)
+                .Find(database => database.ClientId == clientId).FirstOrDefaultAsync();
         }
 
         public async Task UpdateClient(Client client)
@@ -32,7 +32,7 @@ namespace Utilize.Identity.Provider.Repository.Clients
 
         public async Task Add(Client client)
         {
-           await _database.GetCollection<Client>(typeof(Client).Name).InsertOneAsync(client);
+            await _database.GetCollection<Client>(typeof(Client).Name).InsertOneAsync(client);
         }
     }
 }
